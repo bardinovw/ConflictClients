@@ -1,0 +1,2239 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Конфликтные клиенты и стресс</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --magenta: #ff0057;
+        --dark-purple: #1c0033;
+        --deep-purple: #2a004d;
+        --el-blue: #00c2ff;
+        --neon-cyan: #00f0ff;
+        --white: #ffffff;
+        --bg-dark: #0a001a;
+      }
+
+      /* Logo styles */
+      .company-logo {
+        position: fixed;
+        top: 24px;
+        right: 32px; /* Безопасная зона */
+        width: 80px;
+        height: auto;
+        z-index: 1000;
+        opacity: 0.85;
+        filter: drop-shadow(0 0 10px var(--neon-cyan));
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+      .company-logo:hover {
+        opacity: 1;
+        filter: drop-shadow(0 0 20px var(--magenta));
+        transform: scale(1.05);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-dark);
+        color: var(--white);
+        font-family: "Montserrat", sans-serif;
+        overflow: hidden;
+        user-select: none;
+      }
+
+      #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+      }
+
+      /* Typography Scaling */
+      .title-text {
+        font-size: clamp(40px, 4vw, 72px) !important;
+        line-height: 1.1;
+      }
+      .subtitle-text {
+        font-size: clamp(22px, 2vw, 32px) !important;
+        line-height: 1.4;
+      }
+      .card-text,
+      .card-text p,
+      .card-text li,
+      .card-text strong {
+        font-size: clamp(16px, 1.1vw, 19px) !important;
+        line-height: 1.5;
+      }
+
+      /* Glassmorphism & Neon */
+      .glass-panel {
+        background: rgba(42, 0, 77, 0.25);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 0, 87, 0.15);
+        border-radius: 20px;
+        box-shadow: 0 4px 15px 0 rgba(255, 0, 87, 0.1);
+      }
+
+      .large-card {
+        padding: 28px !important;
+        border-radius: 20px !important;
+      }
+
+      .neon-text-magenta {
+        text-shadow:
+          0 0 10px var(--magenta),
+          0 0 20px rgba(255, 0, 87, 0.5);
+      }
+      .neon-text-cyan {
+        text-shadow:
+          0 0 10px var(--neon-cyan),
+          0 0 20px rgba(255, 0, 87, 0.5);
+      }
+
+      .neon-border {
+        box-shadow:
+          0 0 10px rgba(255, 0, 87, 0.15),
+          inset 0 0 5px rgba(255, 0, 87, 0.1);
+        transition: all 0.3s ease;
+      }
+      .neon-border:hover {
+        box-shadow:
+          0 0 25px var(--magenta),
+          inset 0 0 15px var(--magenta);
+        transform: translateY(-5px);
+      }
+
+      .neon-border-magenta {
+        box-shadow:
+          0 0 10px rgba(255, 0, 87, 0.2),
+          inset 0 0 5px rgba(255, 0, 87, 0.1);
+        transition: all 0.3s ease;
+      }
+      .neon-border-magenta:hover {
+        box-shadow:
+          0 0 25px var(--magenta),
+          inset 0 0 15px var(--magenta);
+        transform: translateY(-5px);
+      }
+
+      .gradient-text {
+        background: linear-gradient(
+          to right,
+          var(--magenta),
+          var(--el-blue),
+          var(--neon-cyan)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      /* Preloader */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: var(--bg-dark);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid transparent;
+        border-top-color: var(--magenta);
+        border-right-color: var(--neon-cyan);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Navigation Spheres */
+      #nav-container {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 100;
+      }
+      .nav-sphere {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--magenta);
+        box-shadow:
+          0 0 10px var(--magenta),
+          inset -2px -2px 6px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        animation: float-sphere 3s ease-in-out infinite alternate;
+      }
+      .nav-sphere:hover {
+        transform: scale(1.5);
+        box-shadow:
+          0 0 20px var(--magenta),
+          0 0 40px var(--magenta);
+      }
+      .nav-sphere.active {
+        background: var(--neon-cyan);
+        box-shadow:
+          0 0 15px var(--neon-cyan),
+          0 0 30px var(--el-blue);
+      }
+      @keyframes float-sphere {
+        0% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* Slides - Container */
+      .slide-container {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 80px;
+        padding-right: 120px;
+        padding-left: 80px;
+        padding-bottom: 80px;
+        box-sizing: border-box;
+      }
+
+      /* Slides - Enlarged and Safe Zoned */
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        padding: 80px 120px 80px 80px; /* Безопасная зона для логотипа */
+        box-sizing: border-box;
+        transform: scale(0.9);
+        filter: blur(10px);
+      }
+      .slide.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+        filter: blur(0px);
+        z-index: 10;
+      }
+
+      /* 3D Carousel Container */
+      .carousel-container {
+        perspective: 1200px;
+        width: 100%;
+        max-width: 1200px;
+        height: 550px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding: 40px;
+      }
+
+      /* 3D Carousel Cards */
+      .carousel-card {
+        position: absolute;
+        width: 100%;
+        max-width: 520px;
+        min-height: 340px;
+        height: auto;
+        transform-style: preserve-3d;
+        cursor: pointer;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 22px;
+        border: 1px solid rgba(0, 240, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #ffffff;
+        word-wrap: break-word;
+        line-height: 1.5;
+      }
+
+      /* Typography overrides for cards specifically */
+      .carousel-card p,
+      .carousel-card div,
+      .carousel-card strong,
+      .carousel-card li {
+        font-size: clamp(16px, 1.1vw, 19px) !important;
+        line-height: 1.5;
+        word-wrap: break-word;
+      }
+
+      /* HEAT Framework */
+      .heat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+        width: 100%;
+        max-width: 1000px;
+      }
+      .heat-card {
+        position: relative;
+        height: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        cursor: default;
+      }
+      .heat-letter {
+        font-size: 7rem;
+        font-weight: 800;
+        transition: all 0.4s ease;
+        color: var(--magenta);
+        text-shadow: 0 0 20px rgba(255, 0, 87, 0.7);
+      }
+      .heat-desc {
+        position: absolute;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        text-align: center;
+        padding: 28px;
+        width: 100%;
+      }
+      .heat-card:hover .heat-letter {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      .heat-card:hover .heat-desc {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Flowchart */
+      .flow-arrow {
+        width: 50px;
+        height: 5px;
+        background: var(--magenta);
+        box-shadow: 0 0 10px var(--magenta);
+        position: relative;
+      }
+      .flow-arrow::after {
+        content: "";
+        position: absolute;
+        right: -12px;
+        top: -10px;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        border-left: 18px solid var(--magenta);
+      }
+
+      .chain-item {
+        transition: all 0.4s ease;
+      }
+
+      /* Interactive Game */
+      .game-btn {
+        background: linear-gradient(45deg, var(--magenta), var(--deep-purple));
+        border: 2px solid var(--neon-cyan);
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        transition: all 0.3s;
+      }
+      .game-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px var(--neon-cyan);
+      }
+
+      /* Controls */
+      #controls {
+        position: fixed;
+        top: 24px;
+        left: 32px;
+        z-index: 100;
+        display: flex;
+        gap: 10px;
+      } /* Перенесено влево во избежание конфликта с лого */
+      .icon-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+      }
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 15px var(--neon-cyan);
+        transform: scale(1.1);
+        transition: 0.2s;
+      }
+
+      /* Morph Dummy Element */
+      #morph-dummy {
+        position: fixed;
+        background: var(--magenta);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 90;
+        opacity: 0;
+        box-shadow: 0 0 20px var(--magenta);
+      }
+
+      .word-cloud-item {
+        position: absolute;
+        white-space: nowrap;
+        font-weight: bold;
+        opacity: 0;
+      }
+
+      /* Video Carousel */
+      .video-carousel-wrapper {
+        padding: 0 40px;
+      }
+      .video-carousel {
+        scroll-behavior: smooth;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .video-card {
+        width: 288px; /* Увеличено */
+        height: 512px; /* Увеличено (Аспект 9:16) */
+        position: relative;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .video-card:hover {
+        transform: scale(1.05);
+        z-index: 10;
+      }
+
+      /* Slido Container */
+      .slido-container {
+        width: 80%; /* Увеличено */
+        height: 65vh; /* Увеличено */
+        border-radius: 20px;
+      }
+      .float-anim {
+        animation: float-container 4s ease-in-out infinite alternate;
+      }
+      @keyframes float-container {
+        0% {
+          transform: translateY(0px);
+          box-shadow: 0 10px 30px rgba(255, 0, 87, 0.2);
+        }
+        100% {
+          transform: translateY(-15px);
+          box-shadow: 0 25px 40px rgba(255, 0, 87, 0.4);
+        }
+      }
+
+      /* Hot Seat Role Cards */
+      .role-card {
+        animation: float-role 4s ease-in-out infinite alternate;
+        transform-style: preserve-3d;
+        backdrop-filter: blur(10px);
+        font-weight: bold;
+      }
+      .role-card:nth-child(2) {
+        animation-delay: 0.5s;
+        animation-duration: 4.5s;
+      }
+      .role-card:nth-child(3) {
+        animation-delay: 1s;
+        animation-duration: 3.8s;
+      }
+      .role-card:nth-child(4) {
+        animation-delay: 1.5s;
+        animation-duration: 4.2s;
+      }
+      .role-card:nth-child(5) {
+        animation-delay: 2s;
+        animation-duration: 4.1s;
+      }
+
+      @keyframes float-role {
+        0% {
+          transform: translateY(0px) rotateZ(-2deg) rotateY(10deg);
+        }
+        100% {
+          transform: translateY(-20px) rotateZ(2deg) rotateY(-10deg);
+        }
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-dark);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--deep-purple);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--magenta);
+      }
+
+      @media (max-width: 1024px) {
+        .slide {
+          padding: 100px 40px 80px 40px;
+        }
+        .carousel-card {
+          width: 90%;
+          max-width: 440px;
+          min-height: 320px;
+        }
+        .heat-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        .heat-card {
+          height: 180px;
+        }
+        .video-card {
+          width: 240px;
+          height: 426px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .slide {
+          padding: 100px 20px 80px 20px;
+        }
+        .carousel-container {
+          height: 420px;
+          gap: 20px;
+          padding: 20px;
+        }
+        .carousel-card {
+          width: 95%;
+          max-width: 320px;
+          min-height: 280px;
+          padding: 24px;
+        }
+        .role-card {
+          font-size: 14px;
+          padding: 12px;
+        }
+        #controls {
+          left: 16px;
+          top: 16px;
+        }
+        .company-logo {
+          right: 16px;
+          top: 16px;
+          width: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Three.js Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="spinner mb-6"></div>
+      <div class="subtitle-text font-bold gradient-text tracking-widest">
+        ИНИЦИАЛИЗАЦИЯ НЕЙРОСЕТИ...
+      </div>
+    </div>
+
+    <!-- Morph Dummy for Transitions -->
+    <div id="morph-dummy"></div>
+
+    <!-- Controls -->
+    <div id="controls">
+      <button class="icon-btn" id="fullscreen-btn" title="Полноэкранный режим">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Company Logo -->
+    <img
+      src="https://obank.kg/images/logo.svg"
+      alt="Company Logo"
+      class="company-logo"
+      id="company-logo"
+      onerror="
+        this.src =
+          'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'30\'><text x=\'0\' y=\'20\' fill=\'%2300F0FF\' font-family=\'sans-serif\' font-size=\'20\' font-weight=\'bold\'>LOGO</text></svg>'
+      "
+    />
+
+    <!-- Navigation (Inside Out Spheres) -->
+    <nav id="nav-container">
+      <!-- Generates via JS -->
+    </nav>
+
+    <!-- Slides Container -->
+    <main id="slides-container">
+      <!-- Slide 1: Титульный -->
+      <section class="slide active" id="slide-0">
+        <div class="text-center max-w-6xl z-10">
+          <h1
+            class="font-extrabold mb-8 neon-text-magenta slide-title title-text"
+          >
+            Конфликтные клиенты<br />и стресс
+          </h1>
+          <p
+            class="font-light glass-panel large-card inline-block subtitle-text"
+          >
+            Нейробиология конфликта, деэскалация<br />и управление собственным
+            состоянием
+          </p>
+        </div>
+      </section>
+
+      <!-- Slide 2: Интерактив (Облако слов) -->
+      <section class="slide" id="slide-1">
+        <div
+          class="w-full h-full flex flex-col items-center justify-center relative"
+        >
+          <h2
+            class="font-bold mb-10 neon-text-cyan z-10 slide-title title-text text-center"
+          >
+            Интерактив
+          </h2>
+          <div class="glass-panel large-card mb-10 z-10 text-center max-w-4xl">
+            <p class="subtitle-text">
+              «С каким словом или эмоцией у вас ассоциируется конфликтный
+              абонент?»
+            </p>
+          </div>
+          <div id="word-cloud" class="relative w-full max-w-5xl h-72 md:h-96">
+            <!-- Words generated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Нейробиология конфликта -->
+      <section class="slide" id="slide-2">
+        <div class="w-full max-w-7xl mx-auto flex flex-col items-center">
+          <h2
+            class="font-bold mb-12 neon-text-magenta slide-title title-text text-center"
+          >
+            Нейробиология конфликта
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 w-full">
+            <div class="glass-panel large-card neon-border text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+              >
+                🧠
+              </div>
+              <h3 class="subtitle-text font-bold mb-4">Природа гнева</h3>
+              <p class="card-text text-gray-300">
+                Древний защитный механизм, блокирующий рациональное мышление.
+              </p>
+            </div>
+            <div class="glass-panel large-card neon-border text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+              >
+                💡
+              </div>
+              <h3 class="subtitle-text font-bold mb-4">
+                Эмоциональный интеллект
+              </h3>
+              <p class="card-text text-gray-300">
+                Способность распознавать и управлять эмоциями (своими и
+                клиента).
+              </p>
+            </div>
+            <div class="glass-panel large-card neon-border text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+              >
+                ⚡
+              </div>
+              <h3 class="subtitle-text font-bold mb-4">Реакция на стресс</h3>
+              <p class="card-text text-gray-300">
+                Выброс адреналина и кортизола: режим «бей или беги».
+              </p>
+            </div>
+          </div>
+
+          <h3 class="subtitle-text font-semibold mb-8 text-gray-200">
+            Четыре главных триггера
+          </h3>
+          <div class="flex flex-wrap justify-center gap-6">
+            <span
+              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              >Справедливость</span
+            >
+            <span
+              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              >Давление</span
+            >
+            <span
+              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              >Неопределенность</span
+            >
+            <span
+              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              >Достоинство</span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Карусель Триггеров (3D) -->
+      <section class="slide" id="slide-3">
+        <h2
+          class="font-bold absolute top-12 text-center w-full neon-text-cyan slide-title title-text"
+        >
+          Управление триггерами
+        </h2>
+
+        <div class="carousel-container" id="carousel-1">
+          <!-- Cards generated via JS for 3D logic -->
+        </div>
+
+        <div class="absolute bottom-12 flex gap-6">
+          <button class="icon-btn" onclick="rotateCarousel('carousel-1', -1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button class="icon-btn" onclick="rotateCarousel('carousel-1', 1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Slide 5: Эмпатия как щит -->
+      <section class="slide" id="slide-4">
+        <h2
+          class="font-bold absolute top-12 text-center w-full neon-text-magenta slide-title title-text"
+        >
+          Эмпатия как щит
+        </h2>
+
+        <div class="carousel-container" id="carousel-2">
+          <!-- Cards generated via JS -->
+        </div>
+
+        <div class="absolute bottom-12 flex gap-6">
+          <button class="icon-btn" onclick="rotateCarousel('carousel-2', -1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button class="icon-btn" onclick="rotateCarousel('carousel-2', 1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Slide 6: Типология абонентов -->
+      <section class="slide" id="slide-5">
+        <h2
+          class="font-bold absolute top-12 text-center w-full neon-text-cyan slide-title title-text"
+        >
+          Типология абонентов
+        </h2>
+
+        <div class="carousel-container" id="carousel-3">
+          <!-- Cards generated via JS -->
+        </div>
+
+        <div class="absolute bottom-12 flex gap-6">
+          <button class="icon-btn" onclick="rotateCarousel('carousel-3', -1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button class="icon-btn" onclick="rotateCarousel('carousel-3', 1)">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Slide 7: Интерактивная игра -->
+      <section class="slide" id="slide-6">
+        <div class="text-center max-w-4xl glass-panel large-card neon-border">
+          <h2 class="font-bold mb-6 gradient-text slide-title title-text">
+            Интерактивная игра
+          </h2>
+          <h3 class="subtitle-text mb-8">«Что я могу для вас сделать?»</h3>
+          <p class="card-text text-gray-300 mb-10">
+            Цель: отказать красиво, не вызвав агрессии.
+          </p>
+
+          <div id="game-stage-1">
+            <p class="mb-8 font-semibold card-text">
+              Клиент требует скидку 50%, которая ему не положена.
+            </p>
+            <div class="flex flex-col gap-6">
+              <button
+                class="game-btn px-8 py-4 rounded-xl text-white font-bold card-text"
+                onclick="playGame(0)"
+              >
+                «Мы не можем дать вам такую скидку по правилам.»
+              </button>
+              <button
+                class="game-btn px-8 py-4 rounded-xl text-white font-bold card-text"
+                onclick="playGame(1)"
+              >
+                «Мне жаль, эта скидка недоступна, но я могу предложить вам
+                бонусный пакет.»
+              </button>
+            </div>
+          </div>
+          <div
+            id="game-result"
+            class="hidden mt-10 p-6 rounded-xl bg-[rgba(0,0,0,0.5)] border border-[rgba(255,0,87,0.5)]"
+          >
+            <p id="game-msg" class="subtitle-text"></p>
+            <button
+              class="mt-6 text-magenta underline card-text"
+              onclick="resetGame()"
+            >
+              Попробовать снова
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Фреймворк HEAT -->
+      <section class="slide" id="slide-7">
+        <h2
+          class="font-bold mb-14 text-center w-full neon-text-magenta slide-title title-text"
+        >
+          Фреймворк H.E.A.T.
+        </h2>
+        <div class="heat-grid">
+          <div class="glass-panel large-card neon-border-magenta heat-card">
+            <span class="heat-letter">H</span>
+            <div class="heat-desc">
+              <h3 class="subtitle-text font-bold text-magenta mb-3">
+                Hear them out
+              </h3>
+              <p class="card-text text-gray-200">
+                Выслушайте. Дайте клиенту выпустить пар без перебиваний.
+              </p>
+            </div>
+          </div>
+          <div class="glass-panel large-card neon-border heat-card">
+            <span class="heat-letter">E</span>
+            <div class="heat-desc">
+              <h3 class="subtitle-text font-bold text-magenta mb-3">
+                Empathize
+              </h3>
+              <p class="card-text text-gray-200">
+                Проявите эмпатию. Покажите, что вы понимаете их чувства.
+              </p>
+            </div>
+          </div>
+          <div class="glass-panel large-card neon-border heat-card">
+            <span class="heat-letter">A</span>
+            <div class="heat-desc">
+              <h3 class="subtitle-text font-bold text-magenta mb-3">
+                Apologize
+              </h3>
+              <p class="card-text text-gray-200">
+                Извинитесь. Извинение за ситуацию не означает признание вины.
+              </p>
+            </div>
+          </div>
+          <div class="glass-panel large-card neon-border-magenta heat-card">
+            <span class="heat-letter">T</span>
+            <div class="heat-desc">
+              <h3 class="subtitle-text font-bold text-magenta mb-3">
+                Take Action
+              </h3>
+              <p class="card-text text-gray-200">
+                Возьмите ответственность и предложите решение проблемы.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Алгоритм оператора -->
+      <section class="slide" id="slide-8">
+        <h2
+          class="font-bold mb-14 text-center w-full neon-text-cyan slide-title title-text"
+        >
+          Алгоритм оператора
+        </h2>
+        <div class="flex flex-col gap-6 max-w-5xl w-full">
+          <div
+            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+            >
+              1
+            </div>
+            <div>
+              <h3 class="subtitle-text font-bold mb-2 text-white">Выслушать</h3>
+              <p class="card-text text-gray-300">
+                Дайте абоненту выговориться без перебиваний. Используйте
+                активное слушание.
+              </p>
+            </div>
+          </div>
+          <div
+            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+            >
+              2
+            </div>
+            <div>
+              <h3 class="subtitle-text font-bold mb-2 text-white">
+                Назвать эмоцию
+              </h3>
+              <p class="card-text text-gray-300">
+                Отразите чувства клиента: «Я понимаю, что эта ситуация вызывает
+                сильное расстройство».
+              </p>
+            </div>
+          </div>
+          <div
+            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+            >
+              3
+            </div>
+            <div>
+              <h3 class="subtitle-text font-bold mb-2 text-white">
+                Поддержать достоинство
+              </h3>
+              <p class="card-text text-gray-300">
+                Покажите уважение к его проблеме и компетентности. Избегайте
+                поучений.
+              </p>
+            </div>
+          </div>
+          <div
+            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+          >
+            <div
+              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+            >
+              4
+            </div>
+            <div>
+              <h3 class="subtitle-text font-bold mb-2 text-white">
+                Объяснить следующий шаг
+              </h3>
+              <p class="card-text text-gray-300">
+                Чётко озвучьте свои действия и дайте понятный прогноз решения
+                вопроса.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Что такое стресс -->
+      <section class="slide" id="slide-9">
+        <div
+          class="glass-panel large-card max-w-5xl text-center neon-border relative overflow-hidden"
+        >
+          <div
+            class="absolute -top-20 -left-20 w-64 h-64 bg-magenta rounded-full mix-blend-screen filter blur-[80px] opacity-40"
+          ></div>
+          <div
+            class="absolute -bottom-20 -right-20 w-64 h-64 bg-magenta rounded-full mix-blend-screen filter blur-[80px] opacity-40"
+          ></div>
+
+          <h2
+            class="font-bold mb-10 neon-text-magenta slide-title title-text relative z-10"
+          >
+            Что такое стресс?
+          </h2>
+          <blockquote
+            class="font-light italic mb-8 subtitle-text relative z-10"
+          >
+            «Стресс — это не то, что с вами происходит, а то, как вы на это
+            реагируете.»
+          </blockquote>
+          <p class="font-bold text-gray-400 card-text relative z-10">
+            — Ганс Селье
+          </p>
+        </div>
+      </section>
+
+      <!-- Slide 11: Причины стресса -->
+      <section class="slide" id="slide-10">
+        <h2
+          class="font-bold mb-14 text-center w-full neon-text-magenta slide-title title-text"
+        >
+          Главные причины стресса
+        </h2>
+
+        <div
+          class="video-carousel-wrapper relative w-full max-w-7xl flex items-center justify-center"
+        >
+          <button
+            class="icon-btn absolute left-0 z-10"
+            onclick="scrollVideoCarousel(-1)"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <div
+            class="video-carousel flex gap-8 overflow-x-auto snap-x snap-mandatory py-6 px-4 w-full hide-scrollbar"
+            id="stress-videos"
+          >
+            <!-- Video 1 -->
+            <div
+              class="video-card glass-panel neon-border snap-center flex-shrink-0 cursor-pointer group rounded-2xl overflow-hidden p-0"
+            >
+              <video
+                class="w-full h-full object-cover rounded-2xl"
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                playsinline
+              ></video>
+              <div
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+              >
+                <div
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </div>
+                <p
+                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                >
+                  РАБОТА
+                </p>
+              </div>
+            </div>
+            <!-- Video 2 -->
+            <div
+              class="video-card glass-panel neon-border snap-center flex-shrink-0 cursor-pointer group rounded-2xl overflow-hidden p-0"
+            >
+              <video
+                class="w-full h-full object-cover rounded-2xl"
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                playsinline
+              ></video>
+              <div
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+              >
+                <div
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </div>
+                <p
+                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg text-center"
+                >
+                  ОТВЕТСТВЕННОСТЬ
+                </p>
+              </div>
+            </div>
+            <!-- Video 3 -->
+            <div
+              class="video-card glass-panel neon-border snap-center flex-shrink-0 cursor-pointer group rounded-2xl overflow-hidden p-0"
+            >
+              <video
+                class="w-full h-full object-cover rounded-2xl"
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                playsinline
+              ></video>
+              <div
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+              >
+                <div
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </div>
+                <p
+                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                >
+                  КОНФЛИКТЫ
+                </p>
+              </div>
+            </div>
+            <!-- Video 4 -->
+            <div
+              class="video-card glass-panel neon-border snap-center flex-shrink-0 cursor-pointer group rounded-2xl overflow-hidden p-0"
+            >
+              <video
+                class="w-full h-full object-cover rounded-2xl"
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                playsinline
+              ></video>
+              <div
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+              >
+                <div
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </div>
+                <p
+                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                >
+                  НЕДОСЫП
+                </p>
+              </div>
+            </div>
+            <!-- Video 5 -->
+            <div
+              class="video-card glass-panel neon-border snap-center flex-shrink-0 cursor-pointer group rounded-2xl overflow-hidden p-0"
+            >
+              <video
+                class="w-full h-full object-cover rounded-2xl"
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                playsinline
+              ></video>
+              <div
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+              >
+                <div
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                >
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </div>
+                <p
+                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                >
+                  ОЖИДАНИЯ
+                </p>
+              </div>
+            </div>
+          </div>
+          <button
+            class="icon-btn absolute right-0 z-10"
+            onclick="scrollVideoCarousel(1)"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Slide 12: Горячий стул -->
+      <section class="slide" id="slide-11">
+        <h2
+          class="font-bold absolute top-12 text-center w-full neon-text-magenta slide-title title-text"
+        >
+          Игра «Горячий стул»
+        </h2>
+
+        <div
+          class="relative w-full max-w-6xl h-full flex flex-col items-center justify-center mt-12"
+        >
+          <!-- Central Card -->
+          <div
+            class="glass-panel large-card neon-border text-center z-10 float-anim"
+            id="hot-seat-center"
+            style="max-width: 800px"
+          >
+            <h3 class="font-bold mb-6 gradient-text subtitle-text">
+              Практика деэскалации
+            </h3>
+            <p class="text-gray-300 mb-6 font-light card-text">
+              Один участник садится на «горячий стул» и получает роль
+              оператора.<br />Остальные участники играют роли различных типов
+              конфликтных абонентов.
+            </p>
+
+            <div
+              class="text-left bg-[rgba(0,0,0,0.4)] p-6 rounded-2xl border border-[rgba(255,0,87,0.2)] neon-border-magenta transition-all"
+            >
+              <h4 class="font-bold mb-4 text-magenta subtitle-text">
+                Задача участника:
+              </h4>
+              <ul class="space-y-3 text-gray-200 card-text">
+                <li class="flex items-center gap-4">
+                  <span class="text-3xl">🎯</span> Распознать архетип клиента
+                </li>
+                <li class="flex items-center gap-4">
+                  <span class="text-3xl">🛡️</span> Применить технику деэскалации
+                </li>
+                <li class="flex items-center gap-4">
+                  <span class="text-3xl">🧘</span> Сохранить спокойствие
+                </li>
+              </ul>
+            </div>
+
+            <!-- Timer -->
+            <div class="mt-6 flex flex-col items-center">
+              <div
+                id="hot-seat-timer"
+                class="text-7xl font-bold text-magenta cursor-pointer neon-text-magenta transition-transform hover:scale-105"
+                onclick="startTimer()"
+              >
+                01:50
+              </div>
+              <p class="text-sm text-gray-400 mt-2 font-light">
+                Нажмите на таймер для старта
+              </p>
+            </div>
+          </div>
+
+          <!-- Floating Role Cards -->
+          <div
+            class="role-card absolute top-16 md:top-24 left-8 md:left-16 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+          >
+            Агрессивный клиент
+          </div>
+          <div
+            class="role-card absolute bottom-16 md:bottom-32 left-12 md:left-24 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+          >
+            Всезнайка
+          </div>
+          <div
+            class="role-card absolute top-24 md:top-32 right-8 md:right-16 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+          >
+            Хронический жалобщик
+          </div>
+          <div
+            class="role-card absolute bottom-24 md:bottom-40 right-12 md:right-24 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+          >
+            Требующий привилегий
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 13: Реакция тела -->
+      <section class="slide" id="slide-12">
+        <h2
+          class="font-bold mb-20 text-center w-full neon-text-cyan slide-title title-text"
+        >
+          Реакция тела на угрозу
+        </h2>
+
+        <div
+          class="flex flex-col md:flex-row items-center justify-center gap-4 max-w-7xl w-full"
+          id="threat-chain"
+        >
+          <!-- 1. Агрессия -->
+          <div
+            class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
+          >
+            <h3 class="subtitle-text font-bold mb-3 text-white">Агрессия</h3>
+            <p class="card-text text-gray-300 text-sm">Крик клиента</p>
+          </div>
+          <div
+            class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
+          ></div>
+          <div
+            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+          >
+            ↓
+          </div>
+
+          <!-- 2. Миндалина -->
+          <div
+            class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
+          >
+            <h3 class="subtitle-text font-bold mb-3 text-white">Миндалина</h3>
+            <p class="card-text text-gray-300 text-sm">Радар опасности</p>
+          </div>
+          <div
+            class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
+          ></div>
+          <div
+            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+          >
+            ↓
+          </div>
+
+          <!-- 3. Гипоталамус -->
+          <div
+            class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
+          >
+            <h3 class="subtitle-text font-bold mb-3 text-white">Гипоталамус</h3>
+            <p class="card-text text-gray-300 text-sm">Командный центр</p>
+          </div>
+          <div
+            class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
+          ></div>
+          <div
+            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+          >
+            ↓
+          </div>
+
+          <!-- 4. Кортизол -->
+          <div
+            class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
+          >
+            <h3 class="subtitle-text font-bold mb-3 text-white">Кортизол</h3>
+            <p class="card-text text-gray-300 text-sm">Выброс гормонов</p>
+          </div>
+          <div
+            class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
+          ></div>
+          <div
+            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+          >
+            ↓
+          </div>
+
+          <!-- 5. Бей или беги -->
+          <div
+            class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
+          >
+            <h3 class="subtitle-text font-bold mb-3 text-magenta">
+              Бей / Беги
+            </h3>
+            <p class="card-text text-gray-300 text-sm">Режим защиты</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 14: Стадии стресса -->
+      <section class="slide" id="slide-13">
+        <h2
+          class="font-bold mb-24 text-center w-full neon-text-magenta slide-title title-text"
+        >
+          Три стадии стресса
+        </h2>
+
+        <div class="relative max-w-6xl w-full h-80 flex items-center">
+          <!-- Line -->
+          <div
+            class="absolute top-1/2 left-0 w-full h-2 bg-gray-700 -translate-y-1/2 rounded-full z-0"
+          >
+            <div
+              class="h-full bg-gradient-to-r from-magenta via-magenta to-deep-purple w-full rounded-full"
+            ></div>
+          </div>
+
+          <div class="flex justify-between w-full relative z-10 px-8">
+            <div class="flex flex-col items-center group">
+              <div
+                class="w-10 h-10 rounded-full bg-magenta mb-6 shadow-[0_0_20px_#FF0057] group-hover:scale-150 transition-transform"
+              ></div>
+              <div class="glass-panel large-card text-center w-64">
+                <h3 class="font-bold text-magenta subtitle-text">Тревога</h3>
+                <p class="mt-3 text-gray-300 card-text">
+                  Мобилизация ресурсов организма
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col items-center group mt-[-60px]">
+              <div class="glass-panel large-card text-center w-64 mb-6">
+                <h3 class="font-bold text-white subtitle-text">
+                  Сопротивление
+                </h3>
+                <p class="mt-3 text-gray-300 card-text">
+                  Адаптация к нагрузке, расход энергии
+                </p>
+              </div>
+              <div
+                class="w-10 h-10 rounded-full bg-[rgba(255,0,87,0.5)] border border-magenta mb-6 shadow-[0_0_20px_#FF0057] group-hover:scale-150 transition-transform"
+              ></div>
+            </div>
+
+            <div class="flex flex-col items-center group">
+              <div
+                class="w-10 h-10 rounded-full bg-[#FF0057] mb-6 shadow-[0_0_30px_#FF0057] group-hover:scale-150 transition-transform"
+              ></div>
+              <div class="glass-panel large-card text-center w-64">
+                <h3 class="font-bold text-magenta subtitle-text">Истощение</h3>
+                <p class="mt-3 text-gray-300 card-text">
+                  Выгорание, потеря сил и здоровья
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 15: Управление стрессом -->
+      <section class="slide" id="slide-14">
+        <h2
+          class="font-bold mb-14 text-center w-full gradient-text slide-title title-text"
+        >
+          Управление состоянием
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full mb-16"
+        >
+          <div class="glass-panel large-card neon-border">
+            <h3 class="font-bold mb-6 flex items-center gap-4 subtitle-text">
+              <span class="text-4xl">🧰</span> Инструменты самопомощи
+            </h3>
+            <ul class="space-y-4 text-gray-300 card-text">
+              <li>• Квадратное дыхание (4-4-4-4)</li>
+              <li>• Практика заземления (5-4-3-2-1)</li>
+              <li>• Физическое расслабление (сканирование тела)</li>
+              <li>• Когнитивная переоценка ситуации</li>
+            </ul>
+          </div>
+          <div class="glass-panel large-card neon-border">
+            <h3 class="font-bold mb-6 flex items-center gap-4 subtitle-text">
+              <span class="text-4xl">🌱</span> Экологичное снятие
+            </h3>
+            <ul class="space-y-4 text-gray-300 card-text">
+              <li>• Информационный детокс после смены</li>
+              <li>• Физическая активность (сброс кортизола)</li>
+              <li>• Обсуждение с коллегами (дебрифинг)</li>
+              <li>• Разделение личного и рабочего времени</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <h3 class="font-bold mb-4 neon-text-magenta subtitle-text">
+            Спасибо за внимание!
+          </h3>
+          <p class="text-gray-400 card-text">Блок вопросов и ответов</p>
+        </div>
+      </section>
+
+      <!-- Slide 16: Вопросы и ответы (Slido) -->
+      <section class="slide" id="slide-15">
+        <h2
+          class="font-bold mb-6 text-center w-full neon-text-cyan slide-title title-text"
+        >
+          Вопросы и ответы
+        </h2>
+        <p class="text-gray-300 mb-12 font-light text-center subtitle-text">
+          Анонимный Q&A через Slido
+        </p>
+
+        <div
+          class="slido-container glass-panel large-card neon-border flex flex-col items-center justify-center relative float-anim p-8 mx-auto"
+        >
+          <p
+            class="font-bold gradient-text z-10 mb-6 text-center subtitle-text"
+          >
+            Здесь будет отображаться Slido Q&A
+          </p>
+          <p class="text-gray-400 z-10 text-center mb-6 max-w-2xl card-text">
+            Вставьте iframe или embed-код из Slido внутрь этого контейнера в
+            исходном коде HTML.
+          </p>
+          <div
+            class="absolute inset-6 border-2 border-dashed border-[rgba(255,0,87,0.3)] rounded-[20px] pointer-events-none"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // --- Data for Carousels ---
+      const carouselData = {
+        "carousel-1": [
+          {
+            title: "Триггер: Угроза достоинству",
+            content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "Вы меня вообще не слушаете", "Вы понимаете что делаете?"</p>
+                            <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Поддержка достоинства (Dignity Lift)</p>
+                            <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Восстановить чувство компетентности клиента.</p>
+                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Вы задаете правильные вопросы", "Вы сделали всё что могли"</div>`,
+          },
+          {
+            title: "Триггер: Неопределенность будущего",
+            content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "И когда это исправят?", "Я жду уже неделю!"</p>
+                            <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Предиктивный анонс</p>
+                            <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Создать прозрачность процесса, даже если точных сроков нет.</p>
+                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Сейчас мы сделаем шаг А, затем шаг Б. Я свяжусь с вами через час."</div>`,
+          },
+          {
+            title: "Триггер: Ограничение свободы",
+            content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "Я буду жаловаться!", "Я требую начальника!"</p>
+                            <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Иллюзия выбора</p>
+                            <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Дать клиенту возможность контролировать процесс в заданных рамках.</p>
+                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Мы можем оформить заявку сейчас или я перезвоню вам вечером. Как удобнее?"</div>`,
+          },
+        ],
+        "carousel-2": [
+          {
+            title: "Эмпатия против симпатии",
+            content:
+              '<p class="text-gray-300 card-text">Симпатия — "Мне вас жаль" (присоединение к эмоции).<br><br>Эмпатия — "Я понимаю, почему вы расстроены" (понимание эмоции без заражения ею). Эмпатия оставляет вас профессионалом.</p>',
+          },
+          {
+            title: "Деперсонализация агрессии",
+            content:
+              '<p class="text-gray-300 card-text">Клиент злится не на вас лично, а на ситуацию, компанию или систему. Ваша задача — стать мостом между проблемой и решением, не принимая удар на свое эго.</p>',
+          },
+          {
+            title: "Сигнализаторы эмпатии",
+            content:
+              '<p class="text-gray-300 card-text">Вербальные кивки: "Да", "Понимаю", "Угу".<br><br>Перефразирование: "Если я правильно вас понял, проблема заключается в..."<br>Это показывает, что вы активно слушаете.</p>',
+          },
+          {
+            title: "Акустические маркеры",
+            content:
+              '<p class="text-gray-300 card-text">Темп речи: чуть медленнее, чем у клиента.<br><br>Тон: спокойный, низкий, уверенный (эффект FM-радио диджея). Это биологически успокаивает собеседника.</p>',
+          },
+        ],
+        "carousel-3": [
+          {
+            title: "Гневный",
+            content:
+              '<p class="mb-3 card-text text-gray-300"><strong class="text-magenta">Маркеры:</strong> Крик, оскорбления, угрозы.</p><p class="card-text text-gray-300"><strong class="text-neon-cyan">Стратегия:</strong> Дать выпустить пар. Не перебивать. Использовать низкий тон голоса. Применять H.E.A.T.</p>',
+          },
+          {
+            title: "Хронический жалобщик",
+            content:
+              '<p class="mb-3 card-text text-gray-300"><strong class="text-magenta">Маркеры:</strong> Винит всех, припоминает прошлые обиды, ноет.</p><p class="card-text text-gray-300"><strong class="text-neon-cyan">Стратегия:</strong> Строго возвращать к сути. Спрашивать: "Как бы вы хотели, чтобы мы решили эту конкретную проблему?"</p>',
+          },
+          {
+            title: "Всезнайка",
+            content:
+              '<p class="mb-3 card-text text-gray-300"><strong class="text-magenta">Маркеры:</strong> "Вы неправильно работаете", цитирует законы (часто неверно).</p><p class="card-text text-gray-300"><strong class="text-neon-cyan">Стратегия:</strong> Подпитывать эго. "Вы абсолютно правы, обратив на это внимание". Опираться на регламенты как на объективный факт.</p>',
+          },
+          {
+            title: "Нерешительный",
+            content:
+              '<p class="mb-3 card-text text-gray-300"><strong class="text-magenta">Маркеры:</strong> Задает одни и те же вопросы, боится сделать шаг.</p><p class="card-text text-gray-300"><strong class="text-neon-cyan">Стратегия:</strong> Взять лидерство. Сузить выбор до двух вариантов. "Я рекомендую вам вариант А, потому что..."</p>',
+          },
+          {
+            title: "Требующий привилегий",
+            content:
+              '<p class="mb-3 card-text text-gray-300"><strong class="text-magenta">Маркеры:</strong> "Я ваш вип-клиент", "Дайте мне менеджера".</p><p class="card-text text-gray-300"><strong class="text-neon-cyan">Стратегия:</strong> Признать статус, но жестко держать рамки. "Как нашему давнему клиенту, я могу предложить вам..."</p>',
+          },
+        ],
+      };
+
+      const carouselStates = {
+        "carousel-1": 0,
+        "carousel-2": 0,
+        "carousel-3": 0,
+      };
+
+      // --- App State ---
+      let currentSlideIndex = 0;
+      const totalSlides = 16;
+      let isAnimating = false;
+
+      // --- Init Function ---
+      window.onload = function () {
+        initThreeJS();
+        generateNavigation();
+        buildCarousels();
+        initVideoInteractions();
+
+        // Remove Preloader
+        setTimeout(() => {
+          gsap.to("#preloader", {
+            opacity: 0,
+            duration: 1,
+            onComplete: () => {
+              document.getElementById("preloader").style.display = "none";
+              initWordCloud(); // Init if first slide is active, but we start at 0
+            },
+          });
+        }, 1500);
+
+        // Fullscreen toggle
+        document
+          .getElementById("fullscreen-btn")
+          .addEventListener("click", () => {
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen().catch((err) => {
+                console.log(
+                  `Error attempting to enable fullscreen: ${err.message}`,
+                );
+              });
+            } else {
+              document.exitFullscreen();
+            }
+          });
+
+        // Wheel scroll navigation
+        window.addEventListener("wheel", (e) => {
+          if (isAnimating) return;
+          if (e.deltaY > 50) {
+            goToSlide(currentSlideIndex + 1);
+          } else if (e.deltaY < -50) {
+            goToSlide(currentSlideIndex - 1);
+          }
+        });
+
+        // Keyboard navigation
+        window.addEventListener("keydown", (e) => {
+          if (isAnimating) return;
+          if (
+            e.key === "ArrowRight" ||
+            e.key === "ArrowDown" ||
+            e.key === " "
+          ) {
+            goToSlide(currentSlideIndex + 1);
+          } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+            goToSlide(currentSlideIndex - 1);
+          }
+        });
+      };
+
+      // --- Navigation Logic ---
+      function generateNavigation() {
+        const nav = document.getElementById("nav-container");
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement("div");
+          dot.className = `nav-sphere ${i === 0 ? "active" : ""}`;
+          dot.id = `nav-dot-${i}`;
+          dot.onclick = (e) => morphToSlide(i, e.target);
+          // Setup animation delay to make them wave
+          dot.style.animationDelay = `${i * 0.2}s`;
+          nav.appendChild(dot);
+        }
+      }
+
+      function morphToSlide(targetIndex, clickedDot) {
+        if (
+          isAnimating ||
+          targetIndex === currentSlideIndex ||
+          targetIndex < 0 ||
+          targetIndex >= totalSlides
+        )
+          return;
+        isAnimating = true;
+
+        const currentSlide = document.getElementById(
+          `slide-${currentSlideIndex}`,
+        );
+        const targetSlide = document.getElementById(`slide-${targetIndex}`);
+        const titleElement = targetSlide.querySelector(".slide-title");
+        const dummy = document.getElementById("morph-dummy");
+
+        // Update dots
+        document.querySelectorAll(".nav-sphere").forEach((d, i) => {
+          d.classList.toggle("active", i === targetIndex);
+        });
+
+        // Morph Animation using Dummy
+        if (clickedDot && titleElement) {
+          const dotRect = clickedDot.getBoundingClientRect();
+          const titleRect = titleElement.getBoundingClientRect();
+
+          // Reset dummy to dot position
+          gsap.set(dummy, {
+            x: dotRect.left,
+            y: dotRect.top,
+            width: dotRect.width,
+            height: dotRect.height,
+            borderRadius: "50%",
+            opacity: 1,
+            background: "var(--magenta)",
+          });
+
+          // Animate dummy to title position
+          gsap.to(dummy, {
+            x: titleRect.left + titleRect.width / 2 - dotRect.width / 2, // Center alignment approx
+            y: titleRect.top,
+            width: titleRect.width * 0.8,
+            height: titleRect.height,
+            borderRadius: "10px",
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.inOut",
+          });
+        }
+
+        // Cinematic transitions
+        gsap.to(currentSlide, {
+          opacity: 0,
+          scale: targetIndex > currentSlideIndex ? 0.9 : 1.1,
+          filter: "blur(15px)",
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            currentSlide.classList.remove("active");
+          },
+        });
+
+        targetSlide.classList.add("active");
+        gsap.fromTo(
+          targetSlide,
+          {
+            opacity: 0,
+            scale: targetIndex > currentSlideIndex ? 1.1 : 0.9,
+            filter: "blur(15px)",
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.8,
+            ease: "power2.inOut",
+            delay: 0.2,
+            onComplete: () => {
+              isAnimating = false;
+              currentSlideIndex = targetIndex;
+              triggerSlideSpecificLogic(currentSlideIndex);
+            },
+          },
+        );
+      }
+
+      function goToSlide(targetIndex) {
+        if (targetIndex < 0 || targetIndex >= totalSlides) return;
+        const dot = document.getElementById(`nav-dot-${targetIndex}`);
+        morphToSlide(targetIndex, dot);
+      }
+
+      function triggerSlideSpecificLogic(index) {
+        if (index === 1) {
+          // Slide 2: Word cloud
+          initWordCloud();
+        } else if (index === 11) {
+          // Slide 12: Hot Seat Game Entrance Animation
+          // Animate central card
+          gsap.fromTo(
+            "#hot-seat-center",
+            { scale: 0.5, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.5)" },
+          );
+          // Stagger animate floating role cards
+          gsap.fromTo(
+            ".role-card",
+            { scale: 0, opacity: 0, rotationY: 90 },
+            {
+              scale: 1,
+              opacity: 1,
+              rotationY: 0,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "back.out(1.2)",
+              delay: 0.3,
+            },
+          );
+        } else if (index === 12) {
+          // Slide 13: Реакция тела
+          gsap.killTweensOf(".chain-item, .chain-arrow");
+          gsap.fromTo(
+            ".chain-item",
+            {
+              opacity: 0.2,
+              scale: 0.9,
+              boxShadow: "0 0 0px transparent",
+              borderColor: "rgba(255, 0, 87, 0.1)",
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              boxShadow: "0 0 30px rgba(255, 0, 87, 0.8)",
+              borderColor: "rgba(255, 0, 87, 1)",
+              duration: 0.5,
+              stagger: 0.6,
+              ease: "power2.out",
+            },
+          );
+          gsap.fromTo(
+            ".chain-arrow",
+            { opacity: 0, width: 0 },
+            {
+              opacity: 1,
+              width: 50,
+              duration: 0.4,
+              stagger: 0.6,
+              delay: 0.3,
+              ease: "power1.inOut",
+            },
+          );
+        }
+      }
+
+      // --- Hot Seat Timer ---
+      let hotSeatTimerInterval = null;
+      let hotSeatTimeLeft = 110;
+
+      function startTimer() {
+        if (hotSeatTimerInterval) return;
+        const timerDisplay = document.getElementById("hot-seat-timer");
+
+        hotSeatTimerInterval = setInterval(() => {
+          hotSeatTimeLeft--;
+
+          let m = Math.floor(hotSeatTimeLeft / 60)
+            .toString()
+            .padStart(2, "0");
+          let s = (hotSeatTimeLeft % 60).toString().padStart(2, "0");
+          timerDisplay.innerText = `${m}:${s}`;
+
+          if (hotSeatTimeLeft <= 0) {
+            clearInterval(hotSeatTimerInterval);
+            hotSeatTimerInterval = null;
+
+            // Show notification
+            timerDisplay.innerText = "ВРЕМЯ ВЫШЛО!";
+            gsap.fromTo(
+              timerDisplay,
+              { scale: 1 },
+              {
+                scale: 1.1,
+                yoyo: true,
+                repeat: 5,
+                duration: 0.2,
+                color: "#FFFFFF",
+                textShadow: "0 0 30px #FF0057",
+              },
+            );
+
+            // Reset after 4 seconds
+            setTimeout(() => {
+              hotSeatTimeLeft = 110;
+              timerDisplay.innerText = "01:50";
+              gsap.to(timerDisplay, {
+                scale: 1,
+                color: "var(--magenta)",
+                textShadow:
+                  "0 0 10px var(--magenta), 0 0 20px rgba(255, 0, 87, 0.5)",
+              });
+            }, 4000);
+          }
+        }, 1000);
+      }
+
+      // --- Carousels Logic ---
+      function buildCarousels() {
+        Object.keys(carouselData).forEach((id) => {
+          const container = document.getElementById(id);
+          if (!container) return;
+
+          const items = carouselData[id];
+          items.forEach((item, i) => {
+            const card = document.createElement("div");
+            card.className = "carousel-card";
+            card.innerHTML = `<h3 class="subtitle-text font-bold mb-5 text-magenta">${item.title}</h3>${item.content}`;
+            container.appendChild(card);
+          });
+          updateCarousel(id);
+        });
+      }
+
+      function rotateCarousel(id, direction) {
+        const data = carouselData[id];
+        carouselStates[id] += direction;
+
+        // Loop logic
+        if (carouselStates[id] < 0) carouselStates[id] = data.length - 1;
+        if (carouselStates[id] >= data.length) carouselStates[id] = 0;
+
+        updateCarousel(id);
+      }
+
+      function updateCarousel(id) {
+        const container = document.getElementById(id);
+        const cards = container.querySelectorAll(".carousel-card");
+        const currentIndex = carouselStates[id];
+
+        cards.forEach((card, i) => {
+          // Calculate relative position (-1, 0, 1)
+          let relIndex = i - currentIndex;
+          const total = cards.length;
+
+          // Adjust for circular feeling
+          if (relIndex < -Math.floor(total / 2)) relIndex += total;
+          if (relIndex > Math.floor(total / 2)) relIndex -= total;
+
+          const isCenter = relIndex === 0;
+
+          const translateX = relIndex * 340;
+          const translateZ = Math.abs(relIndex) * -200;
+          const rotateY = relIndex * -15;
+          const opac = Math.abs(relIndex) > 1 ? 0 : isCenter ? 1 : 0.4;
+          const zIndex = 100 - Math.abs(relIndex);
+
+          // Visual state calculations for focus (Scale 1.15 for active, 0.9 for inactive)
+          const scale = isCenter ? 1.15 : 0.9;
+          const bgColor = isCenter
+            ? "linear-gradient(145deg, #1C0033, #2A004D)"
+            : "rgba(255, 255, 255, 0.02)";
+          const boxShad = isCenter
+            ? "0 0 40px rgba(255, 0, 87, 0.9), inset 0 0 20px rgba(255, 0, 87, 0.5)"
+            : "0 4px 15px 0 rgba(255, 0, 87, 0.1)";
+          const borderCol = isCenter
+            ? "rgba(255, 0, 87, 1)"
+            : "rgba(255, 0, 87, 0.15)";
+
+          gsap.to(card, {
+            x: translateX,
+            z: translateZ,
+            rotationY: rotateY,
+            scale: scale,
+            opacity: opac,
+            backgroundImage: isCenter ? bgColor : "none",
+            backgroundColor: isCenter ? "transparent" : bgColor,
+            boxShadow: boxShad,
+            borderColor: borderCol,
+            zIndex: zIndex,
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        });
+      }
+
+      // --- Interactive Game ---
+      function playGame(choice) {
+        const resultBox = document.getElementById("game-result");
+        const msg = document.getElementById("game-msg");
+        resultBox.classList.remove("hidden");
+
+        if (choice === 0) {
+          msg.innerHTML =
+            '<span class="text-magenta font-bold">❌ Прямой отказ.</span> Вызывает триггер "Ограничение свободы" и "Угроза достоинству". Клиент начнет спорить.';
+          resultBox.style.borderColor = "var(--magenta)";
+        } else {
+          msg.innerHTML =
+            '<span class="text-neon-cyan font-bold">✅ Отличный выбор.</span> Вы использовали технику "Эмпатия + Альтернатива". Это переключает внимание клиента на новые возможности.';
+          resultBox.style.borderColor = "var(--neon-cyan)";
+        }
+      }
+      function resetGame() {
+        document.getElementById("game-result").classList.add("hidden");
+      }
+
+      // --- Video Carousel Logic ---
+      function scrollVideoCarousel(direction) {
+        const carousel = document.getElementById("stress-videos");
+        const cardWidth = 288;
+        const gap = 32;
+        carousel.scrollBy({
+          left: direction * (cardWidth + gap),
+          behavior: "smooth",
+        });
+      }
+
+      function initVideoInteractions() {
+        const videoCards = document.querySelectorAll(".video-card");
+        videoCards.forEach((card) => {
+          const video = card.querySelector("video");
+          const overlay = card.querySelector(".play-overlay");
+
+          card.addEventListener("click", () => {
+            if (video.paused) {
+              // Останавливаем все остальные видео перед запуском нового
+              document.querySelectorAll(".video-card video").forEach((v) => {
+                if (v !== video) {
+                  v.pause();
+                  v.currentTime = 0;
+                  v.nextElementSibling.style.opacity = "1";
+                  v.nextElementSibling.style.pointerEvents = "auto";
+                }
+              });
+              video.play();
+              overlay.style.opacity = "0";
+              overlay.style.pointerEvents = "none";
+            } else {
+              video.pause();
+              overlay.style.opacity = "1";
+              overlay.style.pointerEvents = "auto";
+            }
+          });
+
+          video.addEventListener("ended", () => {
+            overlay.style.opacity = "1";
+            overlay.style.pointerEvents = "auto";
+          });
+        });
+      }
+
+      // --- Word Cloud Animation ---
+      const words = [
+        "Агрессия",
+        "Страх",
+        "Давление",
+        "Обида",
+        "Усталость",
+        "Крик",
+        "Непонимание",
+        "Защита",
+        "Напряжение",
+      ];
+      let cloudInited = false;
+      function initWordCloud() {
+        if (cloudInited) return;
+        cloudInited = true;
+        const container = document.getElementById("word-cloud");
+        container.innerHTML = "";
+
+        words.forEach((word, i) => {
+          const el = document.createElement("div");
+          el.className = "word-cloud-item";
+          // Random color from palette
+          const colors = [
+            "var(--magenta)",
+            "var(--neon-cyan)",
+            "var(--el-blue)",
+            "#ffffff",
+          ];
+          el.style.color = colors[Math.floor(Math.random() * colors.length)];
+          el.style.fontSize = `${Math.random() * 30 + 20}px`; // Увеличенный размер слов
+          el.style.textShadow = `0 0 10px ${el.style.color}`;
+          el.innerText = word;
+
+          // Random position %
+          el.style.left = `${Math.random() * 70 + 15}%`;
+          el.style.top = `${Math.random() * 70 + 15}%`;
+
+          container.appendChild(el);
+
+          // Animate appearance
+          gsap.to(el, {
+            opacity: Math.random() * 0.5 + 0.5,
+            scale: Math.random() * 0.5 + 1,
+            duration: 2 + Math.random() * 2,
+            repeat: -1,
+            yoyo: true,
+            delay: i * 0.3,
+            ease: "sine.inOut",
+          });
+        });
+      }
+
+      // --- Three.js Background ---
+      function initThreeJS() {
+        const container = document.getElementById("canvas-container");
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a001a, 0.001);
+
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000,
+        );
+        camera.position.z = 300;
+
+        const renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true,
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Particles Geometry
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+        const colorsArray = new Float32Array(particlesCount * 3);
+
+        const colorPalette = [
+          new THREE.Color("#FF0057"), // Magenta
+          new THREE.Color("#00C2FF"), // El Blue
+          new THREE.Color("#00F0FF"), // Neon Cyan
+          new THREE.Color("#2A004D"), // Deep Purple
+        ];
+
+        for (let i = 0; i < particlesCount * 3; i += 3) {
+          // positions in a sphere/cloud
+          posArray[i] = (Math.random() - 0.5) * 1200;
+          posArray[i + 1] = (Math.random() - 0.5) * 1000;
+          posArray[i + 2] = (Math.random() - 0.5) * 1000;
+
+          // random color from palette
+          const mixedColor =
+            colorPalette[Math.floor(Math.random() * colorPalette.length)];
+          colorsArray[i] = mixedColor.r;
+          colorsArray[i + 1] = mixedColor.g;
+          colorsArray[i + 2] = mixedColor.b;
+        }
+
+        particlesGeometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(posArray, 3),
+        );
+        particlesGeometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(colorsArray, 3),
+        );
+
+        const particlesMaterial = new THREE.PointsMaterial({
+          size: 3,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.8,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const particleMesh = new THREE.Points(
+          particlesGeometry,
+          particlesMaterial,
+        );
+        scene.add(particleMesh);
+
+        // Floating Neural Lines (simplified via connecting lines in random positions)
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0x1c0033,
+          transparent: true,
+          opacity: 0.3,
+        });
+        const lineGeo = new THREE.BufferGeometry();
+        const linePos = new Float32Array(300); // 100 points
+        for (let i = 0; i < 300; i++) {
+          linePos[i] = (Math.random() - 0.5) * 800;
+        }
+        lineGeo.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
+        const lines = new THREE.LineSegments(lineGeo, lineMat);
+        scene.add(lines);
+
+        // Mouse interaction vars
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener("mousemove", (event) => {
+          mouseX = event.clientX / window.innerWidth - 0.5;
+          mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const elapsedTime = clock.getElapsedTime();
+
+          // Rotate particles slowly
+          particleMesh.rotation.y = elapsedTime * 0.05;
+          particleMesh.rotation.x = elapsedTime * 0.02;
+
+          lines.rotation.y = elapsedTime * -0.03;
+
+          // Parallax effect on mouse move
+          camera.position.x += (mouseX * 100 - camera.position.x) * 0.05;
+          camera.position.y += (-mouseY * 100 - camera.position.y) * 0.05;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize handler
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      }
+    </script>
+  </body>
+</html>
