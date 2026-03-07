@@ -11,9 +11,9 @@
 /* Logo styles */
 .company-logo {
   position: fixed;
-  top: 24px;
-  right: 32px; /* Безопасная зона */
-  width: 80px;
+  top: 40px;
+  right: 40px; /* Безопасная зона */
+  width: 120px;
   height: auto;
   z-index: 1000;
   opacity: 0.85;
