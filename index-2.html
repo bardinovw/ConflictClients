@@ -25,9 +25,9 @@
       /* Logo styles */
       .company-logo {
         position: fixed;
-        top: 24px;
-        right: 32px; /* Безопасная зона */
-        width: 80px;
+        top: 40px;
+        right: 40px; /* Безопасная зона */
+        width: 130px;
         height: auto;
         z-index: 1000;
         opacity: 0.85;
@@ -60,21 +60,21 @@
         z-index: -1;
       }
 
-      /* Typography Scaling */
+      /* Typography Scaling - Увеличено на 15-25% */
       .title-text {
-        font-size: clamp(40px, 4vw, 72px) !important;
-        line-height: 1.1;
+        font-size: clamp(48px, 5vw, 90px) !important;
+        line-height: 1.2;
       }
       .subtitle-text {
-        font-size: clamp(22px, 2vw, 32px) !important;
-        line-height: 1.4;
+        font-size: clamp(26px, 2.5vw, 40px) !important;
+        line-height: 1.5;
       }
       .card-text,
       .card-text p,
       .card-text li,
       .card-text strong {
-        font-size: clamp(16px, 1.1vw, 19px) !important;
-        line-height: 1.5;
+        font-size: clamp(18px, 1.3vw, 22px) !important;
+        line-height: 1.6;
       }
 
       /* Glassmorphism & Neon */
@@ -83,24 +83,24 @@
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 0, 87, 0.15);
-        border-radius: 20px;
+        border-radius: 24px;
         box-shadow: 0 4px 15px 0 rgba(255, 0, 87, 0.1);
       }
 
       .large-card {
-        padding: 28px !important;
-        border-radius: 20px !important;
+        padding: 40px !important; /* Увеличены отступы внутри карточек */
+        border-radius: 24px !important;
       }
 
       .neon-text-magenta {
         text-shadow:
-          0 0 10px var(--magenta),
-          0 0 20px rgba(255, 0, 87, 0.5);
+          0 0 15px var(--magenta),
+          0 0 30px rgba(255, 0, 87, 0.6);
       }
       .neon-text-cyan {
         text-shadow:
-          0 0 10px var(--neon-cyan),
-          0 0 20px rgba(255, 0, 87, 0.5);
+          0 0 15px var(--neon-cyan),
+          0 0 30px rgba(255, 0, 87, 0.6);
       }
 
       .neon-border {
@@ -111,21 +111,21 @@
       }
       .neon-border:hover {
         box-shadow:
-          0 0 25px var(--magenta),
-          inset 0 0 15px var(--magenta);
+          0 0 30px var(--magenta),
+          inset 0 0 20px var(--magenta);
         transform: translateY(-5px);
       }
 
       .neon-border-magenta {
         box-shadow:
-          0 0 10px rgba(255, 0, 87, 0.2),
-          inset 0 0 5px rgba(255, 0, 87, 0.1);
+          0 0 12px rgba(255, 0, 87, 0.2),
+          inset 0 0 6px rgba(255, 0, 87, 0.1);
         transition: all 0.3s ease;
       }
       .neon-border-magenta:hover {
         box-shadow:
-          0 0 25px var(--magenta),
-          inset 0 0 15px var(--magenta);
+          0 0 30px var(--magenta),
+          inset 0 0 20px var(--magenta);
         transform: translateY(-5px);
       }
 
@@ -153,9 +153,9 @@
         flex-direction: column;
       }
       .spinner {
-        width: 60px;
-        height: 60px;
-        border: 4px solid transparent;
+        width: 70px;
+        height: 70px;
+        border: 5px solid transparent;
         border-top-color: var(--magenta);
         border-right-color: var(--neon-cyan);
         border-radius: 50%;
@@ -178,8 +178,8 @@
         z-index: 100;
       }
       .nav-sphere {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         background: var(--magenta);
         box-shadow:
@@ -193,21 +193,21 @@
       .nav-sphere:hover {
         transform: scale(1.5);
         box-shadow:
-          0 0 20px var(--magenta),
-          0 0 40px var(--magenta);
+          0 0 25px var(--magenta),
+          0 0 50px var(--magenta);
       }
       .nav-sphere.active {
         background: var(--neon-cyan);
         box-shadow:
-          0 0 15px var(--neon-cyan),
-          0 0 30px var(--el-blue);
+          0 0 20px var(--neon-cyan),
+          0 0 40px var(--el-blue);
       }
       @keyframes float-sphere {
         0% {
           transform: translateY(0px);
         }
         100% {
-          transform: translateY(-8px);
+          transform: translateY(-10px);
         }
       }
 
@@ -218,9 +218,10 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding-top: 80px;
-        padding-right: 120px;
-        padding-left: 80px;
+        /* Безопасная зона для логотипа: правый и верхний отступы увеличены */
+        padding-top: 120px;
+        padding-right: 160px;
+        padding-left: 100px;
         padding-bottom: 80px;
         box-sizing: border-box;
       }
@@ -238,7 +239,8 @@
         align-items: center;
         opacity: 0;
         visibility: hidden;
-        padding: 80px 120px 80px 80px; /* Безопасная зона для логотипа */
+        /* Безопасная зона: right 160px не дает контенту зайти под логотип */
+        padding: 120px 160px 80px 100px;
         box-sizing: border-box;
         transform: scale(0.9);
         filter: blur(10px);
@@ -251,48 +253,47 @@
         z-index: 10;
       }
 
-      /* 3D Carousel Container */
+      /* 3D Carousel Container - Увеличен масштаб */
       .carousel-container {
         perspective: 1200px;
         width: 100%;
-        max-width: 1200px;
-        height: 550px;
+        max-width: 1400px;
+        height: 650px;
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 40px;
-        padding: 40px;
+        gap: 60px;
+        padding: 50px;
       }
 
-      /* 3D Carousel Cards */
+      /* 3D Carousel Cards - Увеличены */
       .carousel-card {
         position: absolute;
         width: 100%;
-        max-width: 520px;
-        min-height: 340px;
+        max-width: 600px;
+        min-height: 400px;
         height: auto;
         transform-style: preserve-3d;
         cursor: pointer;
-        padding: 32px;
+        padding: 40px;
         display: flex;
         flex-direction: column;
-        border-radius: 22px;
+        border-radius: 28px;
         border: 1px solid rgba(0, 240, 255, 0.15);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         color: #ffffff;
         word-wrap: break-word;
-        line-height: 1.5;
+        line-height: 1.6;
       }
 
-      /* Typography overrides for cards specifically */
       .carousel-card p,
       .carousel-card div,
       .carousel-card strong,
       .carousel-card li {
-        font-size: clamp(16px, 1.1vw, 19px) !important;
-        line-height: 1.5;
+        font-size: clamp(18px, 1.3vw, 22px) !important;
+        line-height: 1.6;
         word-wrap: break-word;
       }
 
@@ -300,13 +301,13 @@
       .heat-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 2.5rem;
+        gap: 3.5rem;
         width: 100%;
-        max-width: 1000px;
+        max-width: 1200px;
       }
       .heat-card {
         position: relative;
-        height: 240px;
+        height: 280px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -314,11 +315,11 @@
         cursor: default;
       }
       .heat-letter {
-        font-size: 7rem;
+        font-size: 9rem;
         font-weight: 800;
         transition: all 0.4s ease;
         color: var(--magenta);
-        text-shadow: 0 0 20px rgba(255, 0, 87, 0.7);
+        text-shadow: 0 0 25px rgba(255, 0, 87, 0.7);
       }
       .heat-desc {
         position: absolute;
@@ -326,7 +327,7 @@
         transform: translateY(20px);
         transition: all 0.4s ease;
         text-align: center;
-        padding: 28px;
+        padding: 36px;
         width: 100%;
       }
       .heat-card:hover .heat-letter {
@@ -340,20 +341,20 @@
 
       /* Flowchart */
       .flow-arrow {
-        width: 50px;
-        height: 5px;
+        width: 60px;
+        height: 6px;
         background: var(--magenta);
-        box-shadow: 0 0 10px var(--magenta);
+        box-shadow: 0 0 15px var(--magenta);
         position: relative;
       }
       .flow-arrow::after {
         content: "";
         position: absolute;
-        right: -12px;
-        top: -10px;
-        border-top: 12px solid transparent;
-        border-bottom: 12px solid transparent;
-        border-left: 18px solid var(--magenta);
+        right: -15px;
+        top: -12px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 20px solid var(--magenta);
       }
 
       .chain-item {
@@ -364,12 +365,12 @@
       .game-btn {
         background: linear-gradient(45deg, var(--magenta), var(--deep-purple));
         border: 2px solid var(--neon-cyan);
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
         transition: all 0.3s;
       }
       .game-btn:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 25px var(--neon-cyan);
+        box-shadow: 0 0 30px var(--neon-cyan);
       }
 
       /* Controls */
@@ -380,13 +381,13 @@
         z-index: 100;
         display: flex;
         gap: 10px;
-      } /* Перенесено влево во избежание конфликта с лого */
+      }
       .icon-btn {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 50%;
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         cursor: pointer;
         color: white;
         display: flex;
@@ -396,7 +397,7 @@
       }
       .icon-btn:hover {
         background: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 0 15px var(--neon-cyan);
+        box-shadow: 0 0 20px var(--neon-cyan);
         transform: scale(1.1);
         transition: 0.2s;
       }
@@ -409,7 +410,7 @@
         pointer-events: none;
         z-index: 90;
         opacity: 0;
-        box-shadow: 0 0 20px var(--magenta);
+        box-shadow: 0 0 30px var(--magenta);
       }
 
       .word-cloud-item {
@@ -419,9 +420,9 @@
         opacity: 0;
       }
 
-      /* Video Carousel */
+      /* Video Carousel - Увеличено */
       .video-carousel-wrapper {
-        padding: 0 40px;
+        padding: 0 50px;
       }
       .video-carousel {
         scroll-behavior: smooth;
@@ -434,8 +435,8 @@
         scrollbar-width: none;
       }
       .video-card {
-        width: 288px; /* Увеличено */
-        height: 512px; /* Увеличено (Аспект 9:16) */
+        width: 320px;
+        height: 568px; /* Аспект 9:16 */
         position: relative;
       }
       .video-card:hover {
@@ -444,9 +445,9 @@
 
       /* Slido Container */
       .slido-container {
-        width: 80%; /* Увеличено */
-        height: 65vh; /* Увеличено */
-        border-radius: 20px;
+        width: 85%;
+        height: 70vh;
+        border-radius: 24px;
       }
       .float-anim {
         animation: float-container 4s ease-in-out infinite alternate;
@@ -454,11 +455,11 @@
       @keyframes float-container {
         0% {
           transform: translateY(0px);
-          box-shadow: 0 10px 30px rgba(255, 0, 87, 0.2);
+          box-shadow: 0 15px 40px rgba(255, 0, 87, 0.2);
         }
         100% {
-          transform: translateY(-15px);
-          box-shadow: 0 25px 40px rgba(255, 0, 87, 0.4);
+          transform: translateY(-20px);
+          box-shadow: 0 30px 50px rgba(255, 0, 87, 0.4);
         }
       }
 
@@ -491,74 +492,88 @@
           transform: translateY(0px) rotateZ(-2deg) rotateY(10deg);
         }
         100% {
-          transform: translateY(-20px) rotateZ(2deg) rotateY(-10deg);
+          transform: translateY(-25px) rotateZ(2deg) rotateY(-10deg);
         }
       }
 
       /* Custom Scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
       }
       ::-webkit-scrollbar-track {
         background: var(--bg-dark);
       }
       ::-webkit-scrollbar-thumb {
         background: var(--deep-purple);
-        border-radius: 4px;
+        border-radius: 5px;
       }
       ::-webkit-scrollbar-thumb:hover {
         background: var(--magenta);
       }
 
+      @media (max-width: 1280px) {
+        .slide {
+          padding: 120px 100px 80px 80px;
+        }
+      }
+
       @media (max-width: 1024px) {
         .slide {
-          padding: 100px 40px 80px 40px;
+          padding: 120px 60px 80px 60px;
         }
         .carousel-card {
           width: 90%;
-          max-width: 440px;
-          min-height: 320px;
+          max-width: 500px;
+          min-height: 360px;
+          padding: 30px;
         }
         .heat-grid {
           grid-template-columns: 1fr;
-          gap: 1.5rem;
+          gap: 2rem;
         }
         .heat-card {
-          height: 180px;
+          height: 220px;
         }
         .video-card {
-          width: 240px;
-          height: 426px;
+          width: 280px;
+          height: 497px;
+        }
+        .title-text {
+          font-size: clamp(40px, 6vw, 60px) !important;
         }
       }
 
       @media (max-width: 768px) {
         .slide {
-          padding: 100px 20px 80px 20px;
+          padding: 100px 30px 80px 30px;
         }
         .carousel-container {
-          height: 420px;
-          gap: 20px;
+          height: 500px;
+          gap: 30px;
           padding: 20px;
         }
         .carousel-card {
           width: 95%;
-          max-width: 320px;
-          min-height: 280px;
+          max-width: 360px;
+          min-height: 300px;
           padding: 24px;
         }
         .role-card {
-          font-size: 14px;
-          padding: 12px;
+          font-size: 16px;
+          padding: 16px;
         }
         #controls {
-          left: 16px;
-          top: 16px;
+          left: 20px;
+          top: 20px;
         }
         .company-logo {
-          right: 16px;
-          top: 16px;
-          width: 60px;
+          right: 20px;
+          top: 20px;
+          width: 65px;
+        }
+        .video-card {
+          width: 240px;
+          height: 426px;
         }
       }
     </style>
@@ -569,7 +584,7 @@
 
     <!-- Preloader -->
     <div id="preloader">
-      <div class="spinner mb-6"></div>
+      <div class="spinner mb-8"></div>
       <div class="subtitle-text font-bold gradient-text tracking-widest">
         ИНИЦИАЛИЗАЦИЯ НЕЙРОСЕТИ...
       </div>
@@ -582,8 +597,8 @@
     <div id="controls">
       <button class="icon-btn" id="fullscreen-btn" title="Полноэкранный режим">
         <svg
-          width="24"
-          height="24"
+          width="28"
+          height="28"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -598,7 +613,7 @@
 
     <!-- Company Logo -->
     <img
-      src="https://obank.kg/images/logo.svg"
+      src="./presentationProject/images/Logo.png"
       alt="Company Logo"
       class="company-logo"
       id="company-logo"
@@ -617,9 +632,9 @@
     <main id="slides-container">
       <!-- [Logical Index 0] Slide 1: Титульный -->
       <section class="slide active" id="slide-0">
-        <div class="text-center max-w-6xl z-10">
+        <div class="text-center max-w-[1200px] z-10">
           <h1
-            class="font-extrabold mb-8 neon-text-magenta slide-title title-text"
+            class="font-extrabold mb-10 neon-text-magenta slide-title title-text"
           >
             Конфликтные клиенты<br />и стресс
           </h1>
@@ -635,15 +650,17 @@
       <!-- [Logical Index 1] NEW Slide: Цели и задачи тренинга -->
       <section class="slide" id="slide-new-1">
         <h2
-          class="font-bold mb-12 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold mb-14 text-center w-full neon-text-magenta slide-title title-text"
         >
           Цели и задачи тренинга
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[1400px] w-full"
+        >
           <div
             class="glass-panel large-card neon-border text-center flex flex-col justify-center items-center transform transition-transform hover:scale-105"
           >
-            <h3 class="subtitle-text font-bold mb-4 text-magenta">
+            <h3 class="subtitle-text font-bold mb-6 text-magenta">
               Образовательная
             </h3>
             <p class="card-text text-gray-300">Понимание природы конфликта</p>
@@ -651,7 +668,7 @@
           <div
             class="glass-panel large-card neon-border text-center flex flex-col justify-center items-center transform transition-transform hover:scale-105"
           >
-            <h3 class="subtitle-text font-bold mb-4 text-el-blue">
+            <h3 class="subtitle-text font-bold mb-6 text-el-blue">
               Аналитическая
             </h3>
             <p class="card-text text-gray-300">Быстрая диагностика ситуации</p>
@@ -659,7 +676,7 @@
           <div
             class="glass-panel large-card neon-border text-center flex flex-col justify-center items-center transform transition-transform hover:scale-105"
           >
-            <h3 class="subtitle-text font-bold mb-4 text-neon-cyan">
+            <h3 class="subtitle-text font-bold mb-6 text-neon-cyan">
               Практическая
             </h3>
             <p class="card-text text-gray-300">Освоение фреймворков</p>
@@ -667,7 +684,7 @@
           <div
             class="glass-panel large-card neon-border text-center flex flex-col justify-center items-center transform transition-transform hover:scale-105"
           >
-            <h3 class="subtitle-text font-bold mb-4 text-white">Защитная</h3>
+            <h3 class="subtitle-text font-bold mb-6 text-white">Защитная</h3>
             <p class="card-text text-gray-300">Стресс-менеджмент</p>
           </div>
         </div>
@@ -676,28 +693,28 @@
       <!-- [Logical Index 2] MOVED Slide: Вопросы и ответы (Slido) -->
       <section class="slide" id="slide-15">
         <h2
-          class="font-bold mb-6 text-center w-full neon-text-cyan slide-title title-text"
+          class="font-bold mb-8 text-center w-full neon-text-cyan slide-title title-text"
         >
           Вопросы и ответы
         </h2>
-        <p class="text-gray-300 mb-12 font-light text-center subtitle-text">
+        <p class="text-gray-300 mb-14 font-light text-center subtitle-text">
           Анонимный Q&A через Slido
         </p>
 
         <div
-          class="slido-container glass-panel large-card neon-border flex flex-col items-center justify-center relative float-anim p-8 mx-auto"
+          class="slido-container glass-panel large-card neon-border flex flex-col items-center justify-center relative float-anim p-10 mx-auto max-w-[1400px]"
         >
           <p
-            class="font-bold gradient-text z-10 mb-6 text-center subtitle-text"
+            class="font-bold gradient-text z-10 mb-8 text-center subtitle-text"
           >
             Здесь будет отображаться Slido Q&A
           </p>
-          <p class="text-gray-400 z-10 text-center mb-6 max-w-2xl card-text">
+          <p class="text-gray-400 z-10 text-center mb-8 max-w-3xl card-text">
             Вставьте iframe или embed-код из Slido внутрь этого контейнера в
             исходном коде HTML.
           </p>
           <div
-            class="absolute inset-6 border-2 border-dashed border-[rgba(255,0,87,0.3)] rounded-[20px] pointer-events-none"
+            class="absolute inset-8 border-2 border-dashed border-[rgba(255,0,87,0.3)] rounded-[24px] pointer-events-none"
           ></div>
         </div>
       </section>
@@ -708,17 +725,22 @@
           class="w-full h-full flex flex-col items-center justify-center relative"
         >
           <h2
-            class="font-bold mb-10 neon-text-cyan z-10 slide-title title-text text-center"
+            class="font-bold mb-12 neon-text-cyan z-10 slide-title title-text text-center"
           >
             Интерактив
           </h2>
-          <div class="glass-panel large-card mb-10 z-10 text-center max-w-4xl">
+          <div
+            class="glass-panel large-card mb-12 z-10 text-center max-w-[1000px]"
+          >
             <p class="subtitle-text">
               «С каким словом или эмоцией у вас ассоциируется конфликтный
               абонент?»
             </p>
           </div>
-          <div id="word-cloud" class="relative w-full max-w-5xl h-72 md:h-96">
+          <div
+            id="word-cloud"
+            class="relative w-full max-w-[1400px] h-[400px] md:h-[500px]"
+          >
             <!-- Words generated by JS -->
           </div>
         </div>
@@ -726,32 +748,32 @@
 
       <!-- [Logical Index 4] Slide 3: Нейробиология конфликта -->
       <section class="slide" id="slide-2">
-        <div class="w-full max-w-7xl mx-auto flex flex-col items-center">
+        <div class="w-full max-w-[1600px] mx-auto flex flex-col items-center">
           <h2
-            class="font-bold mb-12 neon-text-magenta slide-title title-text text-center"
+            class="font-bold mb-14 neon-text-magenta slide-title title-text text-center"
           >
             Нейробиология конфликта
           </h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 w-full">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 w-full">
             <div class="glass-panel large-card neon-border text-center">
               <div
-                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+                class="w-20 h-20 mx-auto mb-8 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,0,87,0.6)] text-5xl"
               >
                 🧠
               </div>
-              <h3 class="subtitle-text font-bold mb-4">Природа гнева</h3>
+              <h3 class="subtitle-text font-bold mb-6">Природа гнева</h3>
               <p class="card-text text-gray-300">
                 Древний защитный механизм, блокирующий рациональное мышление.
               </p>
             </div>
             <div class="glass-panel large-card neon-border text-center">
               <div
-                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+                class="w-20 h-20 mx-auto mb-8 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,0,87,0.6)] text-5xl"
               >
                 💡
               </div>
-              <h3 class="subtitle-text font-bold mb-4">
+              <h3 class="subtitle-text font-bold mb-6">
                 Эмоциональный интеллект
               </h3>
               <p class="card-text text-gray-300">
@@ -761,35 +783,35 @@
             </div>
             <div class="glass-panel large-card neon-border text-center">
               <div
-                class="w-16 h-16 mx-auto mb-6 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,87,0.6)] text-3xl"
+                class="w-20 h-20 mx-auto mb-8 bg-[rgba(255,0,87,0.2)] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,0,87,0.6)] text-5xl"
               >
                 ⚡
               </div>
-              <h3 class="subtitle-text font-bold mb-4">Реакция на стресс</h3>
+              <h3 class="subtitle-text font-bold mb-6">Реакция на стресс</h3>
               <p class="card-text text-gray-300">
                 Выброс адреналина и кортизола: режим «бей или беги».
               </p>
             </div>
           </div>
 
-          <h3 class="subtitle-text font-semibold mb-8 text-gray-200">
+          <h3 class="subtitle-text font-semibold mb-10 text-gray-200">
             Четыре главных триггера
           </h3>
-          <div class="flex flex-wrap justify-center gap-6">
+          <div class="flex flex-wrap justify-center gap-8">
             <span
-              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              class="px-10 py-4 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_20px_rgba(255,0,87,0.5)] card-text font-bold"
               >Справедливость</span
             >
             <span
-              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              class="px-10 py-4 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_20px_rgba(255,0,87,0.5)] card-text font-bold"
               >Давление</span
             >
             <span
-              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              class="px-10 py-4 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_20px_rgba(255,0,87,0.5)] card-text font-bold"
               >Неопределенность</span
             >
             <span
-              class="px-8 py-3 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_15px_rgba(255,0,87,0.5)] card-text font-bold"
+              class="px-10 py-4 glass-panel border border-[#FF0057] text-white rounded-full shadow-[0_0_20px_rgba(255,0,87,0.5)] card-text font-bold"
               >Достоинство</span
             >
           </div>
@@ -799,7 +821,7 @@
       <!-- [Logical Index 5] Slide 4: Карусель Триггеров (3D) -->
       <section class="slide" id="slide-3">
         <h2
-          class="font-bold absolute top-12 text-center w-full neon-text-cyan slide-title title-text"
+          class="font-bold absolute top-16 text-center w-full neon-text-cyan slide-title title-text"
         >
           Управление триггерами
         </h2>
@@ -808,11 +830,11 @@
           <!-- Cards generated via JS for 3D logic -->
         </div>
 
-        <div class="absolute bottom-12 flex gap-6">
+        <div class="absolute bottom-16 flex gap-8">
           <button class="icon-btn" onclick="rotateCarousel('carousel-1', -1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -823,8 +845,8 @@
           </button>
           <button class="icon-btn" onclick="rotateCarousel('carousel-1', 1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -839,7 +861,7 @@
       <!-- [Logical Index 6] Slide 5: Эмпатия как щит -->
       <section class="slide" id="slide-4">
         <h2
-          class="font-bold absolute top-12 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold absolute top-16 text-center w-full neon-text-magenta slide-title title-text"
         >
           Эмпатия как щит
         </h2>
@@ -848,11 +870,11 @@
           <!-- Cards generated via JS -->
         </div>
 
-        <div class="absolute bottom-12 flex gap-6">
+        <div class="absolute bottom-16 flex gap-8">
           <button class="icon-btn" onclick="rotateCarousel('carousel-2', -1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -863,8 +885,8 @@
           </button>
           <button class="icon-btn" onclick="rotateCarousel('carousel-2', 1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -879,7 +901,7 @@
       <!-- [Logical Index 7] Slide 6: Типология абонентов -->
       <section class="slide" id="slide-5">
         <h2
-          class="font-bold absolute top-12 text-center w-full neon-text-cyan slide-title title-text"
+          class="font-bold absolute top-16 text-center w-full neon-text-cyan slide-title title-text"
         >
           Типология абонентов
         </h2>
@@ -888,11 +910,11 @@
           <!-- Cards generated via JS -->
         </div>
 
-        <div class="absolute bottom-12 flex gap-6">
+        <div class="absolute bottom-16 flex gap-8">
           <button class="icon-btn" onclick="rotateCarousel('carousel-3', -1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -903,8 +925,8 @@
           </button>
           <button class="icon-btn" onclick="rotateCarousel('carousel-3', 1)">
             <svg
-              width="24"
-              height="24"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -918,28 +940,30 @@
 
       <!-- [Logical Index 8] Slide 7: Интерактивная игра -->
       <section class="slide" id="slide-6">
-        <div class="text-center max-w-4xl glass-panel large-card neon-border">
-          <h2 class="font-bold mb-6 gradient-text slide-title title-text">
+        <div
+          class="text-center max-w-[1200px] glass-panel large-card neon-border w-full"
+        >
+          <h2 class="font-bold mb-8 gradient-text slide-title title-text">
             Интерактивная игра
           </h2>
-          <h3 class="subtitle-text mb-8">«Что я могу для вас сделать?»</h3>
-          <p class="card-text text-gray-300 mb-10">
+          <h3 class="subtitle-text mb-10">«Что я могу для вас сделать?»</h3>
+          <p class="card-text text-gray-300 mb-12">
             Цель: отказать красиво, не вызвав агрессии.
           </p>
 
           <div id="game-stage-1">
-            <p class="mb-8 font-semibold card-text">
+            <p class="mb-10 font-semibold card-text">
               Клиент требует скидку 50%, которая ему не положена.
             </p>
-            <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-8">
               <button
-                class="game-btn px-8 py-4 rounded-xl text-white font-bold card-text"
+                class="game-btn px-10 py-5 rounded-2xl text-white font-bold card-text"
                 onclick="playGame(0)"
               >
                 «Мы не можем дать вам такую скидку по правилам.»
               </button>
               <button
-                class="game-btn px-8 py-4 rounded-xl text-white font-bold card-text"
+                class="game-btn px-10 py-5 rounded-2xl text-white font-bold card-text"
                 onclick="playGame(1)"
               >
                 «Мне жаль, эта скидка недоступна, но я могу предложить вам
@@ -949,11 +973,11 @@
           </div>
           <div
             id="game-result"
-            class="hidden mt-10 p-6 rounded-xl bg-[rgba(0,0,0,0.5)] border border-[rgba(255,0,87,0.5)]"
+            class="hidden mt-12 p-8 rounded-2xl bg-[rgba(0,0,0,0.5)] border border-[rgba(255,0,87,0.5)]"
           >
             <p id="game-msg" class="subtitle-text"></p>
             <button
-              class="mt-6 text-magenta underline card-text"
+              class="mt-8 text-magenta underline card-text font-bold"
               onclick="resetGame()"
             >
               Попробовать снова
@@ -965,7 +989,7 @@
       <!-- [Logical Index 9] Slide 8: Фреймворк HEAT -->
       <section class="slide" id="slide-7">
         <h2
-          class="font-bold mb-14 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold mb-16 text-center w-full neon-text-magenta slide-title title-text"
         >
           Фреймворк H.E.A.T.
         </h2>
@@ -973,7 +997,7 @@
           <div class="glass-panel large-card neon-border-magenta heat-card">
             <span class="heat-letter">H</span>
             <div class="heat-desc">
-              <h3 class="subtitle-text font-bold text-magenta mb-3">
+              <h3 class="subtitle-text font-bold text-magenta mb-4">
                 Hear them out
               </h3>
               <p class="card-text text-gray-200">
@@ -984,7 +1008,7 @@
           <div class="glass-panel large-card neon-border heat-card">
             <span class="heat-letter">E</span>
             <div class="heat-desc">
-              <h3 class="subtitle-text font-bold text-magenta mb-3">
+              <h3 class="subtitle-text font-bold text-magenta mb-4">
                 Empathize
               </h3>
               <p class="card-text text-gray-200">
@@ -995,7 +1019,7 @@
           <div class="glass-panel large-card neon-border heat-card">
             <span class="heat-letter">A</span>
             <div class="heat-desc">
-              <h3 class="subtitle-text font-bold text-magenta mb-3">
+              <h3 class="subtitle-text font-bold text-magenta mb-4">
                 Apologize
               </h3>
               <p class="card-text text-gray-200">
@@ -1006,7 +1030,7 @@
           <div class="glass-panel large-card neon-border-magenta heat-card">
             <span class="heat-letter">T</span>
             <div class="heat-desc">
-              <h3 class="subtitle-text font-bold text-magenta mb-3">
+              <h3 class="subtitle-text font-bold text-magenta mb-4">
                 Take Action
               </h3>
               <p class="card-text text-gray-200">
@@ -1020,21 +1044,21 @@
       <!-- [Logical Index 10] Slide 9: Алгоритм оператора -->
       <section class="slide" id="slide-8">
         <h2
-          class="font-bold mb-14 text-center w-full neon-text-cyan slide-title title-text"
+          class="font-bold mb-16 text-center w-full neon-text-cyan slide-title title-text"
         >
           Алгоритм оператора
         </h2>
-        <div class="flex flex-col gap-6 max-w-5xl w-full">
+        <div class="flex flex-col gap-10 max-w-[1400px] w-full">
           <div
-            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+            class="glass-panel large-card neon-border flex items-center gap-10 transform transition-transform hover:scale-105"
           >
             <div
-              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+              class="w-24 h-24 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-5xl shadow-[0_0_25px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
             >
               1
             </div>
             <div>
-              <h3 class="subtitle-text font-bold mb-2 text-white">Выслушать</h3>
+              <h3 class="subtitle-text font-bold mb-3 text-white">Выслушать</h3>
               <p class="card-text text-gray-300">
                 Дайте абоненту выговориться без перебиваний. Используйте
                 активное слушание.
@@ -1042,15 +1066,15 @@
             </div>
           </div>
           <div
-            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+            class="glass-panel large-card neon-border flex items-center gap-10 transform transition-transform hover:scale-105"
           >
             <div
-              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+              class="w-24 h-24 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-5xl shadow-[0_0_25px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
             >
               2
             </div>
             <div>
-              <h3 class="subtitle-text font-bold mb-2 text-white">
+              <h3 class="subtitle-text font-bold mb-3 text-white">
                 Назвать эмоцию
               </h3>
               <p class="card-text text-gray-300">
@@ -1060,15 +1084,15 @@
             </div>
           </div>
           <div
-            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+            class="glass-panel large-card neon-border flex items-center gap-10 transform transition-transform hover:scale-105"
           >
             <div
-              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+              class="w-24 h-24 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-5xl shadow-[0_0_25px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
             >
               3
             </div>
             <div>
-              <h3 class="subtitle-text font-bold mb-2 text-white">
+              <h3 class="subtitle-text font-bold mb-3 text-white">
                 Поддержать достоинство
               </h3>
               <p class="card-text text-gray-300">
@@ -1078,15 +1102,15 @@
             </div>
           </div>
           <div
-            class="glass-panel large-card neon-border flex items-center gap-8 transform transition-transform hover:scale-105"
+            class="glass-panel large-card neon-border flex items-center gap-10 transform transition-transform hover:scale-105"
           >
             <div
-              class="w-20 h-20 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-4xl shadow-[0_0_20px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
+              class="w-24 h-24 rounded-full bg-[rgba(255,0,87,0.2)] flex items-center justify-center text-5xl shadow-[0_0_25px_rgba(255,0,87,0.6)] flex-shrink-0 font-bold border border-magenta"
             >
               4
             </div>
             <div>
-              <h3 class="subtitle-text font-bold mb-2 text-white">
+              <h3 class="subtitle-text font-bold mb-3 text-white">
                 Объяснить следующий шаг
               </h3>
               <p class="card-text text-gray-300">
@@ -1101,58 +1125,58 @@
       <!-- [Logical Index 11] MOVED Slide: Горячий стул -->
       <section class="slide" id="slide-11">
         <h2
-          class="font-bold absolute top-12 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold absolute top-16 text-center w-full neon-text-magenta slide-title title-text"
         >
           Игра «Горячий стул»
         </h2>
 
         <div
-          class="relative w-full max-w-6xl h-full flex flex-col items-center justify-center mt-12"
+          class="relative w-full max-w-[1500px] h-full flex flex-col items-center justify-center mt-16"
         >
           <!-- Central Card -->
           <div
             class="glass-panel large-card neon-border text-center z-10 float-anim"
             id="hot-seat-center"
-            style="max-width: 800px"
+            style="max-width: 1100px"
           >
-            <h3 class="font-bold mb-6 gradient-text subtitle-text">
+            <h3 class="font-bold mb-8 gradient-text subtitle-text">
               Практика деэскалации
             </h3>
-            <p class="text-gray-300 mb-6 font-light card-text">
+            <p class="text-gray-300 mb-10 font-light card-text">
               Один участник садится на «горячий стул» и получает роль
               оператора.<br />Остальные участники играют роли различных типов
               конфликтных абонентов.
             </p>
 
             <div
-              class="text-left bg-[rgba(0,0,0,0.4)] p-6 rounded-2xl border border-[rgba(255,0,87,0.2)] neon-border-magenta transition-all"
+              class="text-left bg-[rgba(0,0,0,0.4)] p-8 rounded-3xl border border-[rgba(255,0,87,0.2)] neon-border-magenta transition-all"
             >
-              <h4 class="font-bold mb-4 text-magenta subtitle-text">
+              <h4 class="font-bold mb-6 text-magenta subtitle-text">
                 Задача участника:
               </h4>
-              <ul class="space-y-3 text-gray-200 card-text">
-                <li class="flex items-center gap-4">
-                  <span class="text-3xl">🎯</span> Распознать архетип клиента
+              <ul class="space-y-5 text-gray-200 card-text">
+                <li class="flex items-center gap-6">
+                  <span class="text-4xl">🎯</span> Распознать архетип клиента
                 </li>
-                <li class="flex items-center gap-4">
-                  <span class="text-3xl">🛡️</span> Применить технику деэскалации
+                <li class="flex items-center gap-6">
+                  <span class="text-4xl">🛡️</span> Применить технику деэскалации
                 </li>
-                <li class="flex items-center gap-4">
-                  <span class="text-3xl">🧘</span> Сохранить спокойствие
+                <li class="flex items-center gap-6">
+                  <span class="text-4xl">🧘</span> Сохранить спокойствие
                 </li>
               </ul>
             </div>
 
             <!-- Timer -->
-            <div class="mt-6 flex flex-col items-center">
+            <div class="mt-8 flex flex-col items-center">
               <div
                 id="hot-seat-timer"
-                class="text-7xl font-bold text-magenta cursor-pointer neon-text-magenta transition-transform hover:scale-105"
+                class="text-8xl font-bold text-magenta cursor-pointer neon-text-magenta transition-transform hover:scale-105"
                 onclick="startTimer()"
               >
                 01:50
               </div>
-              <p class="text-sm text-gray-400 mt-2 font-light">
+              <p class="text-base text-gray-400 mt-4 font-light">
                 Нажмите на таймер для старта
               </p>
             </div>
@@ -1160,22 +1184,22 @@
 
           <!-- Floating Role Cards -->
           <div
-            class="role-card absolute top-16 md:top-24 left-8 md:left-16 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+            class="role-card absolute top-32 md:top-40 left-12 md:left-24 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_20px_rgba(255,0,87,0.3)] card-text z-20 font-bold text-lg"
           >
             Агрессивный клиент
           </div>
           <div
-            class="role-card absolute bottom-16 md:bottom-32 left-12 md:left-24 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+            class="role-card absolute bottom-24 md:bottom-40 left-16 md:left-32 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_20px_rgba(255,0,87,0.3)] card-text z-20 font-bold text-lg"
           >
             Всезнайка
           </div>
           <div
-            class="role-card absolute top-24 md:top-32 right-8 md:right-16 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+            class="role-card absolute top-40 md:top-48 right-12 md:right-24 glass-panel large-card border border-[#FF0057] text-white shadow-[0_0_20px_rgba(255,0,87,0.3)] card-text z-20 font-bold text-lg"
           >
             Хронический жалобщик
           </div>
           <div
-            class="role-card absolute bottom-24 md:bottom-40 right-12 md:right-24 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_15px_rgba(255,0,87,0.3)] card-text z-20"
+            class="role-card absolute bottom-32 md:bottom-48 right-16 md:right-32 glass-panel large-card border border-[#FF0057] text-[#FF0057] shadow-[0_0_20px_rgba(255,0,87,0.3)] card-text z-20 font-bold text-lg"
           >
             Требующий привилегий
           </div>
@@ -1185,22 +1209,22 @@
       <!-- [Logical Index 12] Slide 10: Что такое стресс -->
       <section class="slide" id="slide-9">
         <div
-          class="glass-panel large-card max-w-5xl text-center neon-border relative overflow-hidden"
+          class="glass-panel large-card max-w-[1200px] text-center neon-border relative overflow-hidden"
         >
           <div
-            class="absolute -top-20 -left-20 w-64 h-64 bg-magenta rounded-full mix-blend-screen filter blur-[80px] opacity-40"
+            class="absolute -top-24 -left-24 w-80 h-80 bg-magenta rounded-full mix-blend-screen filter blur-[100px] opacity-40"
           ></div>
           <div
-            class="absolute -bottom-20 -right-20 w-64 h-64 bg-magenta rounded-full mix-blend-screen filter blur-[80px] opacity-40"
+            class="absolute -bottom-24 -right-24 w-80 h-80 bg-magenta rounded-full mix-blend-screen filter blur-[100px] opacity-40"
           ></div>
 
           <h2
-            class="font-bold mb-10 neon-text-magenta slide-title title-text relative z-10"
+            class="font-bold mb-12 neon-text-magenta slide-title title-text relative z-10"
           >
             Что такое стресс?
           </h2>
           <blockquote
-            class="font-light italic mb-8 subtitle-text relative z-10"
+            class="font-light italic mb-10 subtitle-text relative z-10"
           >
             «Стресс — это не то, что с вами происходит, а то, как вы на это
             реагируете.»
@@ -1214,21 +1238,21 @@
       <!-- [Logical Index 13] Slide 11: Причины стресса (GSAP карусель из 3 видео) -->
       <section class="slide" id="slide-10">
         <h2
-          class="font-bold mb-10 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold mb-12 text-center w-full neon-text-magenta slide-title title-text"
         >
           Главные причины стресса
         </h2>
 
         <div
-          class="relative w-full max-w-7xl h-[600px] flex items-center justify-center mt-8"
+          class="relative w-full max-w-[1600px] h-[700px] flex items-center justify-center mt-10"
         >
           <button
-            class="icon-btn absolute left-4 z-30"
+            class="icon-btn absolute left-8 z-30 w-16 h-16"
             onclick="scrollVideoCarousel(-1)"
           >
             <svg
-              width="24"
-              height="24"
+              width="32"
+              height="32"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -1244,26 +1268,26 @@
           >
             <!-- Video 1 -->
             <div
-              class="video-card absolute w-[288px] h-[512px] glass-panel neon-border cursor-pointer group rounded-2xl overflow-hidden p-0"
+              class="video-card absolute w-[320px] h-[568px] glass-panel neon-border cursor-pointer group rounded-3xl overflow-hidden p-0"
             >
               <video
-                class="w-full h-full object-cover rounded-2xl"
-                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                class="w-full h-full object-cover rounded-3xl"
+                src="./presentationProject/video-files/IMG_1970.MP4"
                 playsinline
                 loop
               ></video>
               <div
-                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-3xl"
               >
                 <div
-                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#FF0057] rounded-full bg-magenta w-20 h-20 flex items-center justify-center pl-2"
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_25px_#FF0057] rounded-full bg-magenta w-24 h-24 flex items-center justify-center pl-3"
                 >
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                  <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
                     <path d="M5 3l14 9-14 9V3z" />
                   </svg>
                 </div>
                 <p
-                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                  class="text-white mt-8 font-bold tracking-widest card-text drop-shadow-xl text-xl"
                 >
                   РАБОТА
                 </p>
@@ -1271,26 +1295,26 @@
             </div>
             <!-- Video 2 -->
             <div
-              class="video-card absolute w-[288px] h-[512px] glass-panel neon-border cursor-pointer group rounded-2xl overflow-hidden p-0"
+              class="video-card absolute w-[320px] h-[568px] glass-panel neon-border cursor-pointer group rounded-3xl overflow-hidden p-0"
             >
               <video
-                class="w-full h-full object-cover rounded-2xl"
-                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                class="w-full h-full object-cover rounded-3xl"
+                src="./presentationProject/video-files/IMG_1971.MP4"
                 playsinline
                 loop
               ></video>
               <div
-                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-3xl"
               >
                 <div
-                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#00C2FF] rounded-full bg-el-blue w-20 h-20 flex items-center justify-center pl-2"
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_25px_#00C2FF] rounded-full bg-el-blue w-24 h-24 flex items-center justify-center pl-3"
                 >
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                  <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
                     <path d="M5 3l14 9-14 9V3z" />
                   </svg>
                 </div>
                 <p
-                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg text-center"
+                  class="text-white mt-8 font-bold tracking-widest card-text drop-shadow-xl text-center text-xl"
                 >
                   КОНФЛИКТЫ
                 </p>
@@ -1298,26 +1322,26 @@
             </div>
             <!-- Video 3 -->
             <div
-              class="video-card absolute w-[288px] h-[512px] glass-panel neon-border cursor-pointer group rounded-2xl overflow-hidden p-0"
+              class="video-card absolute w-[320px] h-[568px] glass-panel neon-border cursor-pointer group rounded-3xl overflow-hidden p-0"
             >
               <video
-                class="w-full h-full object-cover rounded-2xl"
-                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                class="w-full h-full object-cover rounded-3xl"
+                src="./presentationProject/video-files/IMG_2186.MP4"
                 playsinline
                 loop
               ></video>
               <div
-                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-2xl"
+                class="play-overlay absolute inset-0 bg-black/40 flex flex-col items-center justify-center transition-all group-hover:bg-black/20 rounded-3xl"
               >
                 <div
-                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_20px_#00F0FF] rounded-full bg-neon-cyan w-20 h-20 flex items-center justify-center pl-2"
+                  class="play-icon opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform shadow-[0_0_25px_#00F0FF] rounded-full bg-neon-cyan w-24 h-24 flex items-center justify-center pl-3"
                 >
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                  <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
                     <path d="M5 3l14 9-14 9V3z" />
                   </svg>
                 </div>
                 <p
-                  class="text-white mt-6 font-bold tracking-widest card-text drop-shadow-lg"
+                  class="text-white mt-8 font-bold tracking-widest card-text drop-shadow-xl text-xl"
                 >
                   НЕДОСЫП
                 </p>
@@ -1326,12 +1350,12 @@
           </div>
 
           <button
-            class="icon-btn absolute right-4 z-30"
+            class="icon-btn absolute right-8 z-30 w-16 h-16"
             onclick="scrollVideoCarousel(1)"
           >
             <svg
-              width="24"
-              height="24"
+              width="32"
+              height="32"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -1346,27 +1370,27 @@
       <!-- [Logical Index 14] Slide 13: Реакция тела -->
       <section class="slide" id="slide-12">
         <h2
-          class="font-bold mb-20 text-center w-full neon-text-cyan slide-title title-text"
+          class="font-bold mb-24 text-center w-full neon-text-cyan slide-title title-text"
         >
           Реакция тела на угрозу
         </h2>
 
         <div
-          class="flex flex-col md:flex-row items-center justify-center gap-4 max-w-7xl w-full"
+          class="flex flex-col md:flex-row items-center justify-center gap-6 max-w-[1600px] w-full"
           id="threat-chain"
         >
           <!-- 1. Агрессия -->
           <div
             class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
           >
-            <h3 class="subtitle-text font-bold mb-3 text-white">Агрессия</h3>
-            <p class="card-text text-gray-300 text-sm">Крик клиента</p>
+            <h3 class="subtitle-text font-bold mb-4 text-white">Агрессия</h3>
+            <p class="card-text text-gray-300">Крик клиента</p>
           </div>
           <div
             class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
           ></div>
           <div
-            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+            class="text-5xl text-magenta md:hidden my-3 chain-arrow opacity-0"
           >
             ↓
           </div>
@@ -1375,14 +1399,14 @@
           <div
             class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
           >
-            <h3 class="subtitle-text font-bold mb-3 text-white">Миндалина</h3>
-            <p class="card-text text-gray-300 text-sm">Радар опасности</p>
+            <h3 class="subtitle-text font-bold mb-4 text-white">Миндалина</h3>
+            <p class="card-text text-gray-300">Радар опасности</p>
           </div>
           <div
             class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
           ></div>
           <div
-            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+            class="text-5xl text-magenta md:hidden my-3 chain-arrow opacity-0"
           >
             ↓
           </div>
@@ -1391,14 +1415,14 @@
           <div
             class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
           >
-            <h3 class="subtitle-text font-bold mb-3 text-white">Гипоталамус</h3>
-            <p class="card-text text-gray-300 text-sm">Командный центр</p>
+            <h3 class="subtitle-text font-bold mb-4 text-white">Гипоталамус</h3>
+            <p class="card-text text-gray-300">Командный центр</p>
           </div>
           <div
             class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
           ></div>
           <div
-            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+            class="text-5xl text-magenta md:hidden my-3 chain-arrow opacity-0"
           >
             ↓
           </div>
@@ -1407,14 +1431,14 @@
           <div
             class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
           >
-            <h3 class="subtitle-text font-bold mb-3 text-white">Кортизол</h3>
-            <p class="card-text text-gray-300 text-sm">Выброс гормонов</p>
+            <h3 class="subtitle-text font-bold mb-4 text-white">Кортизол</h3>
+            <p class="card-text text-gray-300">Выброс гормонов</p>
           </div>
           <div
             class="chain-arrow hidden md:block flow-arrow opacity-0 w-0"
           ></div>
           <div
-            class="text-4xl text-magenta md:hidden my-2 chain-arrow opacity-0"
+            class="text-5xl text-magenta md:hidden my-3 chain-arrow opacity-0"
           >
             ↓
           </div>
@@ -1423,10 +1447,10 @@
           <div
             class="chain-item glass-panel large-card neon-border-magenta text-center flex-1 w-full opacity-30"
           >
-            <h3 class="subtitle-text font-bold mb-3 text-magenta">
+            <h3 class="subtitle-text font-bold mb-4 text-magenta">
               Бей / Беги
             </h3>
-            <p class="card-text text-gray-300 text-sm">Режим защиты</p>
+            <p class="card-text text-gray-300">Режим защиты</p>
           </div>
         </div>
       </section>
@@ -1434,55 +1458,55 @@
       <!-- [Logical Index 15] Slide 14: Стадии стресса -->
       <section class="slide" id="slide-13">
         <h2
-          class="font-bold mb-24 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold mb-28 text-center w-full neon-text-magenta slide-title title-text"
         >
           Три стадии стресса
         </h2>
 
-        <div class="relative max-w-6xl w-full h-80 flex items-center">
+        <div class="relative max-w-[1500px] w-full h-96 flex items-center">
           <!-- Line -->
           <div
-            class="absolute top-1/2 left-0 w-full h-2 bg-gray-700 -translate-y-1/2 rounded-full z-0"
+            class="absolute top-1/2 left-0 w-full h-3 bg-gray-700 -translate-y-1/2 rounded-full z-0"
           >
             <div
               class="h-full bg-gradient-to-r from-magenta via-magenta to-deep-purple w-full rounded-full"
             ></div>
           </div>
 
-          <div class="flex justify-between w-full relative z-10 px-8">
+          <div class="flex justify-between w-full relative z-10 px-10">
             <div class="flex flex-col items-center group">
               <div
-                class="w-10 h-10 rounded-full bg-magenta mb-6 shadow-[0_0_20px_#FF0057] group-hover:scale-150 transition-transform"
+                class="w-14 h-14 rounded-full bg-magenta mb-8 shadow-[0_0_30px_#FF0057] group-hover:scale-150 transition-transform"
               ></div>
-              <div class="glass-panel large-card text-center w-64">
+              <div class="glass-panel large-card text-center w-80">
                 <h3 class="font-bold text-magenta subtitle-text">Тревога</h3>
-                <p class="mt-3 text-gray-300 card-text">
+                <p class="mt-4 text-gray-300 card-text">
                   Мобилизация ресурсов организма
                 </p>
               </div>
             </div>
 
-            <div class="flex flex-col items-center group mt-[-60px]">
-              <div class="glass-panel large-card text-center w-64 mb-6">
+            <div class="flex flex-col items-center group mt-[-80px]">
+              <div class="glass-panel large-card text-center w-80 mb-8">
                 <h3 class="font-bold text-white subtitle-text">
                   Сопротивление
                 </h3>
-                <p class="mt-3 text-gray-300 card-text">
+                <p class="mt-4 text-gray-300 card-text">
                   Адаптация к нагрузке, расход энергии
                 </p>
               </div>
               <div
-                class="w-10 h-10 rounded-full bg-[rgba(255,0,87,0.5)] border border-magenta mb-6 shadow-[0_0_20px_#FF0057] group-hover:scale-150 transition-transform"
+                class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.5)] border-2 border-magenta mb-8 shadow-[0_0_30px_#FF0057] group-hover:scale-150 transition-transform"
               ></div>
             </div>
 
             <div class="flex flex-col items-center group">
               <div
-                class="w-10 h-10 rounded-full bg-[#FF0057] mb-6 shadow-[0_0_30px_#FF0057] group-hover:scale-150 transition-transform"
+                class="w-14 h-14 rounded-full bg-[#FF0057] mb-8 shadow-[0_0_40px_#FF0057] group-hover:scale-150 transition-transform"
               ></div>
-              <div class="glass-panel large-card text-center w-64">
+              <div class="glass-panel large-card text-center w-80">
                 <h3 class="font-bold text-magenta subtitle-text">Истощение</h3>
-                <p class="mt-3 text-gray-300 card-text">
+                <p class="mt-4 text-gray-300 card-text">
                   Выгорание, потеря сил и здоровья
                 </p>
               </div>
@@ -1494,11 +1518,11 @@
       <!-- [Logical Index 16] NEW Slide: Как вы справляетесь со стрессом? -->
       <section class="slide" id="slide-new-2">
         <div
-          class="text-center max-w-6xl z-10 glass-panel large-card neon-border float-anim p-12"
+          class="text-center max-w-[1400px] z-10 glass-panel large-card neon-border float-anim p-16"
         >
           <h2
             class="font-extrabold neon-text-cyan slide-title title-text mb-0"
-            style="line-height: 1.2"
+            style="line-height: 1.3"
           >
             Как вы справляетесь<br />со стрессом?
           </h2>
@@ -1508,19 +1532,19 @@
       <!-- [Logical Index 17] Slide 15: Управление состоянием -->
       <section class="slide" id="slide-14">
         <h2
-          class="font-bold mb-14 text-center w-full gradient-text slide-title title-text"
+          class="font-bold mb-16 text-center w-full gradient-text slide-title title-text"
         >
           Управление состоянием
         </h2>
 
         <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full mb-16"
+          class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[1500px] w-full mb-20"
         >
           <div class="glass-panel large-card neon-border">
-            <h3 class="font-bold mb-6 flex items-center gap-4 subtitle-text">
-              <span class="text-4xl">🧰</span> Инструменты самопомощи
+            <h3 class="font-bold mb-8 flex items-center gap-6 subtitle-text">
+              <span class="text-5xl">🧰</span> Инструменты самопомощи
             </h3>
-            <ul class="space-y-4 text-gray-300 card-text">
+            <ul class="space-y-6 text-gray-300 card-text">
               <li>• Квадратное дыхание (4-4-4-4)</li>
               <li>• Практика заземления (5-4-3-2-1)</li>
               <li>• Физическое расслабление (сканирование тела)</li>
@@ -1528,10 +1552,10 @@
             </ul>
           </div>
           <div class="glass-panel large-card neon-border">
-            <h3 class="font-bold mb-6 flex items-center gap-4 subtitle-text">
-              <span class="text-4xl">🌱</span> Экологичное снятие
+            <h3 class="font-bold mb-8 flex items-center gap-6 subtitle-text">
+              <span class="text-5xl">🌱</span> Экологичное снятие
             </h3>
-            <ul class="space-y-4 text-gray-300 card-text">
+            <ul class="space-y-6 text-gray-300 card-text">
               <li>• Информационный детокс после смены</li>
               <li>• Физическая активность (сброс кортизола)</li>
               <li>• Обсуждение с коллегами (дебрифинг)</li>
@@ -1544,136 +1568,138 @@
       <!-- [Logical Index 18] NEW Slide: Как борются со стрессом звезды? -->
       <section class="slide" id="slide-new-3">
         <h2
-          class="font-bold mb-10 text-center w-full neon-text-magenta slide-title title-text"
+          class="font-bold mb-14 text-center w-full neon-text-magenta slide-title title-text"
         >
           Как борются со стрессом звезды?
         </h2>
         <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full px-4"
+          class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1600px] w-full px-6"
         >
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🎨
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Johnny Depp</h3>
-              <p class="text-gray-300 text-sm">Арт-терапия</p>
+              <h3 class="font-bold text-white text-xl mb-1">Johnny Depp</h3>
+              <p class="text-gray-300 text-lg">Арт-терапия</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🤝
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Angelina Jolie</h3>
-              <p class="text-gray-300 text-sm">Волонтёрство</p>
+              <h3 class="font-bold text-white text-xl mb-1">Angelina Jolie</h3>
+              <p class="text-gray-300 text-lg">Волонтёрство</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🤐
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Mark Zuckerberg</h3>
-              <p class="text-gray-300 text-sm">Молчание несколько часов</p>
+              <h3 class="font-bold text-white text-xl mb-1">Mark Zuckerberg</h3>
+              <p class="text-gray-300 text-lg">Молчание несколько часов</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🎬
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Quentin Tarantino</h3>
-              <p class="text-gray-300 text-sm">Просмотр старых фильмов</p>
+              <h3 class="font-bold text-white text-xl mb-1">
+                Quentin Tarantino
+              </h3>
+              <p class="text-gray-300 text-lg">Просмотр старых фильмов</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🎧
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Elon Musk</h3>
-              <p class="text-gray-300 text-sm">Прослушивание подкастов</p>
+              <h3 class="font-bold text-white text-xl mb-1">Elon Musk</h3>
+              <p class="text-gray-300 text-lg">Прослушивание подкастов</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🌻
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Michelle Obama</h3>
-              <p class="text-gray-300 text-sm">Работа в саду</p>
+              <h3 class="font-bold text-white text-xl mb-1">Michelle Obama</h3>
+              <p class="text-gray-300 text-lg">Работа в саду</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🎣
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Brad Pitt</h3>
-              <p class="text-gray-300 text-sm">Рыбалка</p>
+              <h3 class="font-bold text-white text-xl mb-1">Brad Pitt</h3>
+              <p class="text-gray-300 text-lg">Рыбалка</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               📚
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Natalie Portman</h3>
-              <p class="text-gray-300 text-sm">Чтение литературы</p>
+              <h3 class="font-bold text-white text-xl mb-1">Natalie Portman</h3>
+              <p class="text-gray-300 text-lg">Чтение литературы</p>
             </div>
           </div>
 
           <div
-            class="glass-panel p-4 rounded-xl neon-border flex items-center gap-4 hover:scale-105 transition-transform"
+            class="glass-panel p-6 rounded-2xl neon-border flex items-center gap-6 hover:scale-105 transition-transform"
           >
             <div
-              class="w-14 h-14 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_10px_rgba(255,0,87,0.5)]"
+              class="w-16 h-16 rounded-full bg-[rgba(255,0,87,0.2)] border border-magenta flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_15px_rgba(255,0,87,0.5)]"
             >
               🍳
             </div>
             <div>
-              <h3 class="font-bold text-white text-base">Gordon Ramsay</h3>
-              <p class="text-gray-300 text-sm">Кулинария</p>
+              <h3 class="font-bold text-white text-xl mb-1">Gordon Ramsay</h3>
+              <p class="text-gray-300 text-lg">Кулинария</p>
             </div>
           </div>
         </div>
@@ -1681,25 +1707,27 @@
 
       <!-- [Logical Index 19] NEW Slide: Финальный мощный слайд -->
       <section class="slide" id="slide-new-4">
-        <div class="flex flex-col items-center justify-center max-w-6xl w-full">
+        <div
+          class="flex flex-col items-center justify-center max-w-[1500px] w-full"
+        >
           <blockquote
-            class="font-extrabold italic mb-16 title-text text-center neon-text-cyan slide-title"
+            class="font-extrabold italic mb-20 title-text text-center neon-text-cyan slide-title"
             style="line-height: 1.3"
           >
             «Спокойный оператор —<br />это якорь для клиента.»
           </blockquote>
 
           <div
-            class="glass-panel large-card neon-border flex flex-col items-center justify-center float-anim p-8"
+            class="glass-panel large-card neon-border flex flex-col items-center justify-center float-anim p-12"
           >
             <!-- QR Code placeholder -->
             <div
-              class="w-48 h-48 bg-white p-3 rounded-2xl shadow-[0_0_30px_rgba(255,0,87,0.8)] mb-6"
+              class="w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(255,0,87,0.8)] mb-8"
             >
               <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://obank.kg"
                 alt="QR Code"
-                class="w-full h-full rounded-xl"
+                class="w-full h-full rounded-2xl"
               />
             </div>
             <p
@@ -1721,21 +1749,21 @@
             content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "Вы меня вообще не слушаете", "Вы понимаете что делаете?"</p>
                             <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Поддержка достоинства (Dignity Lift)</p>
                             <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Восстановить чувство компетентности клиента.</p>
-                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Вы задаете правильные вопросы", "Вы сделали всё что могли"</div>`,
+                            <div class="mt-auto p-5 bg-[rgba(0,0,0,0.3)] rounded-2xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Вы задаете правильные вопросы", "Вы сделали всё что могли"</div>`,
           },
           {
             title: "Триггер: Неопределенность будущего",
             content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "И когда это исправят?", "Я жду уже неделю!"</p>
                             <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Предиктивный анонс</p>
                             <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Создать прозрачность процесса, даже если точных сроков нет.</p>
-                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Сейчас мы сделаем шаг А, затем шаг Б. Я свяжусь с вами через час."</div>`,
+                            <div class="mt-auto p-5 bg-[rgba(0,0,0,0.3)] rounded-2xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Сейчас мы сделаем шаг А, затем шаг Б. Я свяжусь с вами через час."</div>`,
           },
           {
             title: "Триггер: Ограничение свободы",
             content: `<p class="mb-3 card-text text-gray-300"><strong class="text-white">Маркеры:</strong> "Я буду жаловаться!", "Я требую начальника!"</p>
                             <p class="mb-3 card-text text-gray-300"><strong class="text-neon-cyan">Техника:</strong> Иллюзия выбора</p>
                             <p class="mb-4 card-text text-gray-300"><strong class="text-white">Стратегия:</strong> Дать клиенту возможность контролировать процесс в заданных рамках.</p>
-                            <div class="mt-auto p-4 bg-[rgba(0,0,0,0.3)] rounded-xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Мы можем оформить заявку сейчас или я перезвоню вам вечером. Как удобнее?"</div>`,
+                            <div class="mt-auto p-5 bg-[rgba(0,0,0,0.3)] rounded-2xl card-text"><strong class="text-magenta">Фразы:</strong><br>"Мы можем оформить заявку сейчас или я перезвоню вам вечером. Как удобнее?"</div>`,
           },
         ],
         "carousel-2": [
@@ -1821,7 +1849,7 @@
 
       // --- App State ---
       let currentSlideIndex = 0;
-      const totalSlides = slideIds.length; // Dynamically use the new array length (20)
+      const totalSlides = slideIds.length;
       let isAnimating = false;
 
       // --- Init Function ---
@@ -1992,12 +2020,12 @@
       }
 
       function triggerSlideSpecificLogic(index) {
-        // Re-mapped logical indexes!
+        // Re-mapped logical indexes
         if (index === 3) {
           // Slide: Word cloud
           initWordCloud();
         } else if (index === 11) {
-          // Slide: Hot Seat Game (UPDATED INDEX)
+          // Slide: Hot Seat Game
           // Animate central card
           gsap.fromTo(
             "#hot-seat-center",
@@ -2044,7 +2072,7 @@
             { opacity: 0, width: 0 },
             {
               opacity: 1,
-              width: 50,
+              width: 60,
               duration: 0.4,
               stagger: 0.6,
               delay: 0.3,
@@ -2098,7 +2126,7 @@
                 scale: 1,
                 color: "var(--magenta)",
                 textShadow:
-                  "0 0 10px var(--magenta), 0 0 20px rgba(255, 0, 87, 0.5)",
+                  "0 0 15px var(--magenta), 0 0 30px rgba(255, 0, 87, 0.6)",
               });
             }, 4000);
           }
@@ -2115,7 +2143,7 @@
           items.forEach((item, i) => {
             const card = document.createElement("div");
             card.className = "carousel-card";
-            card.innerHTML = `<h3 class="subtitle-text font-bold mb-5 text-magenta">${item.title}</h3>${item.content}`;
+            card.innerHTML = `<h3 class="subtitle-text font-bold mb-6 text-magenta">${item.title}</h3>${item.content}`;
             container.appendChild(card);
           });
           updateCarousel(id);
@@ -2149,19 +2177,19 @@
 
           const isCenter = relIndex === 0;
 
-          const translateX = relIndex * 340;
-          const translateZ = Math.abs(relIndex) * -200;
+          const translateX = relIndex * 420; // Увеличено из-за больших карточек
+          const translateZ = Math.abs(relIndex) * -250; // Увеличено
           const rotateY = relIndex * -15;
           const opac = Math.abs(relIndex) > 1 ? 0 : isCenter ? 1 : 0.4;
           const zIndex = 100 - Math.abs(relIndex);
 
-          // Visual state calculations for focus (Scale 1.15 for active, 0.9 for inactive)
+          // Visual state calculations for focus
           const scale = isCenter ? 1.15 : 0.9;
           const bgColor = isCenter
             ? "linear-gradient(145deg, #1C0033, #2A004D)"
             : "rgba(255, 255, 255, 0.02)";
           const boxShad = isCenter
-            ? "0 0 40px rgba(255, 0, 87, 0.9), inset 0 0 20px rgba(255, 0, 87, 0.5)"
+            ? "0 0 50px rgba(255, 0, 87, 0.9), inset 0 0 25px rgba(255, 0, 87, 0.5)"
             : "0 4px 15px 0 rgba(255, 0, 87, 0.1)";
           const borderCol = isCenter
             ? "rgba(255, 0, 87, 1)"
@@ -2223,7 +2251,7 @@
           "#video-carousel-container .video-card",
         );
         const isMobile = window.innerWidth <= 768;
-        const xOffset = isMobile ? 220 : 360; // Расстояние между видео (пиксели)
+        const xOffset = isMobile ? 260 : 460; // Увеличено из-за больших видео
 
         cards.forEach((card, i) => {
           let relIndex = i - videoCarouselState;
@@ -2359,8 +2387,8 @@
             "#ffffff",
           ];
           el.style.color = colors[Math.floor(Math.random() * colors.length)];
-          el.style.fontSize = `${Math.random() * 30 + 20}px`; // Увеличенный размер слов
-          el.style.textShadow = `0 0 10px ${el.style.color}`;
+          el.style.fontSize = `${Math.random() * 40 + 24}px`; // Увеличенный размер слов
+          el.style.textShadow = `0 0 15px ${el.style.color}`;
           el.innerText = word;
 
           // Random position %
